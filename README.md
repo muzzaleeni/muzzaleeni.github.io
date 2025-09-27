@@ -1,2 +1,1 @@
-# muzzaleen.github.io
-Personal website
+# Personal website
