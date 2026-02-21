@@ -1,7 +1,11 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects - Muslim Bayemirov</title>
+  <link rel="stylesheet" href="styles.css">
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-35TFTR7CRC"></script>
@@ -12,18 +16,34 @@
 
     gtag('config', 'G-35TFTR7CRC');
   </script>
-
 </head>
 
 <body>
-  <ul>
-    <li><b>gourmenta</b> | python, fastapi, sqlite, next.js, tailwindcss 🌐 — scraped ∼3gb restaurant data, automated
-      captcha,
-      built fast query pipeline, lighthouse 100/98, 100+ users 🍽️</li>
-    <li><b>dostapp</b> | python, fastapi, aws, next.js, tailwindcss, typescript 🌐 — social dining platform in kz,
-      deployed
-      payment integration in 48h via fastapi + aws lambda 💸</li>
-  </ul>
+  <main>
+    <header class="site-header">
+      <a class="brand" href="index.html">muslim bayemirov</a>
+      <p class="tagline">data + software + execution</p>
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="index.html">home</a></li>
+          <li><a href="resume.pdf">tl;dr</a></li>
+          <li><a href="about.html">about</a></li>
+          <li><a href="education.html">education</a></li>
+          <li><a href="experience.html">experience</a></li>
+          <li><a href="projects.html" aria-current="page">projects</a></li>
+          <li><a href="awards.html">awards</a></li>
+          <li><a href="skills.html">skills</a></li>
+          <li><a href="contact.html">contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <h1>projects</h1>
+    <ul class="list">
+      <li><strong>gourmenta</strong> | python, fastapi, sqlite, next.js, tailwindcss 🌐 - scraped around 3gb of restaurant data, automated captcha, built a fast query pipeline, lighthouse 100/98, 100+ users 🍽️</li>
+      <li><strong>dostapp</strong> | python, fastapi, aws, next.js, tailwindcss, typescript 🌐 - social dining platform in kz, shipped payment integration in 48h using fastapi + aws lambda 💸</li>
+    </ul>
+  </main>
 </body>
 
 </html>
