@@ -12,6 +12,7 @@
   const statusEl = document.getElementById("media-status");
   const timecodeEl = document.getElementById("timecode");
   const copyrightYearEl = document.getElementById("copyright-year");
+  const editionStampEl = document.getElementById("edition-stamp");
 
   if (!stage || !video || !audio || !soundButton || !statusEl || !timecodeEl) {
     return;
@@ -20,6 +21,31 @@
   if (copyrightYearEl) {
     copyrightYearEl.textContent = String(new Date().getFullYear());
   }
+
+  const setEditionStamp = () => {
+    if (!editionStampEl) {
+      return;
+    }
+
+    const now = new Date();
+    const local = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const weekday = (local.getDay() + 6) % 7; // Monday=0...Sunday=6
+    local.setDate(local.getDate() - weekday + 3); // Thursday of current ISO week
+
+    const isoYear = local.getFullYear();
+    const firstThursday = new Date(isoYear, 0, 4);
+    const firstWeekday = (firstThursday.getDay() + 6) % 7;
+    firstThursday.setDate(firstThursday.getDate() - firstWeekday + 3);
+
+    const isoWeek = 1 + Math.round((local - firstThursday) / 604800000);
+    const season = String(isoYear).slice(-2);
+    const week = String(isoWeek).padStart(2, "0");
+    const stamp = `S${season}.W${week}`;
+
+    editionStampEl.textContent = stamp;
+    editionStampEl.setAttribute("aria-label", `edition ${stamp}`);
+    editionStampEl.title = `edition ${stamp}`;
+  };
 
   const setStatus = (message) => {
     statusEl.textContent = message || "";
@@ -314,6 +340,7 @@
 
   setSoundButtonState();
   updateTimecode();
+  setEditionStamp();
 
   setTimeout(async () => {
     await attemptVideoAutoplay();
