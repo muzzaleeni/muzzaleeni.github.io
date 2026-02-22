@@ -19,7 +19,7 @@ body {
   overflow: hidden;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
+  font-family: "Archivo", "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
 }
 
 .film-stage {
@@ -74,7 +74,7 @@ body.video-live .vignette {
 .intro-title h1 {
   margin: 0;
   font-size: clamp(1.6rem, 6vw, 4.3rem);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   font-weight: 700;
   color: #ffffff;
 }
