@@ -300,21 +300,6 @@ body.video-live .vignette {
   pointer-events: none;
 }
 
-.ambient-clock {
-  position: absolute;
-  top: calc(1.62rem + env(safe-area-inset-top));
-  left: clamp(0.8rem, 2vw, 1.4rem);
-  z-index: 3;
-  margin: 0;
-  color: rgba(244, 246, 251, 0.72);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.56rem;
-  letter-spacing: 0.08em;
-  text-transform: lowercase;
-  font-variant-numeric: tabular-nums;
-  pointer-events: none;
-}
-
 @media (max-width: 768px) {
   html,
   body {
@@ -366,8 +351,7 @@ body.video-live .vignette {
 
   .copyright {
     top: calc(0.62rem + env(safe-area-inset-top));
-    right: 50%;
-    transform: translateX(50%);
+    right: calc(0.68rem + env(safe-area-inset-right));
     font-size: 0.56rem;
     letter-spacing: 0.07em;
   }
@@ -377,13 +361,6 @@ body.video-live .vignette {
     left: calc(0.68rem + env(safe-area-inset-left));
     font-size: 0.56rem;
     letter-spacing: 0.09em;
-  }
-
-  .ambient-clock {
-    top: calc(1.34rem + env(safe-area-inset-top));
-    left: calc(0.68rem + env(safe-area-inset-left));
-    font-size: 0.51rem;
-    letter-spacing: 0.07em;
   }
 
   .sound-toggle {
@@ -428,11 +405,6 @@ body.video-live .vignette {
   .edition-stamp {
     font-size: 0.5rem;
     letter-spacing: 0.08em;
-  }
-
-  .ambient-clock {
-    font-size: 0.46rem;
-    letter-spacing: 0.06em;
   }
 
 }
