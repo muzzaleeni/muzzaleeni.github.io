@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" id="top">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Muslim Bayemirov | Industrial Showspace</title>
-  <meta name="description" content="Muslim Bayemirov - software engineering intern at BMW Group. Runway-inspired personal website.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Muslim Bayemirov | Industrial Runway Film</title>
+  <meta name="description" content="Muslim Bayemirov - software engineering intern at BMW Group. Film-first runway experience.">
   <link rel="stylesheet" href="styles.css">
 
   <!-- Google tag (gtag.js) -->
@@ -18,117 +18,39 @@
   </script>
 </head>
 
-<body data-scene="hero">
-  <canvas id="light-canvas" aria-hidden="true"></canvas>
-  <div class="runway-spine" aria-hidden="true"></div>
+<body>
+  <main class="film-stage">
+    <video id="runway-video" class="runway-video" autoplay muted loop playsinline preload="metadata" poster="assets/runway-poster.jpg"
+      data-mobile-src="assets/runway-mobile.mp4" data-desktop-src="assets/runway-desktop.mp4"
+      data-mobile-webm="assets/runway-mobile.webm" data-desktop-webm="assets/runway-desktop.webm">
+      <source media="(max-width: 768px)" src="assets/runway-mobile.mp4" type="video/mp4">
+      <source src="assets/runway-desktop.mp4" type="video/mp4">
+      <source media="(max-width: 768px)" src="assets/runway-mobile.webm" type="video/webm">
+      <source src="assets/runway-desktop.webm" type="video/webm">
+    </video>
 
-  <main class="show">
-    <header class="call-sheet reveal">
-      <p class="sheet-id">industrial showspace // season 26</p>
-      <div class="sheet-row">
-        <a class="brand magnetic" href="#top">muslim bayemirov</a>
-        <p class="sheet-role">software engineering intern @ bmw group // munich</p>
-      </div>
-      <nav class="quick-nav" aria-label="Scene Index">
-        <a data-nav-link href="#about">About</a>
-        <a data-nav-link href="#experience">Experience</a>
-        <a data-nav-link href="#projects">Projects</a>
-        <a data-nav-link href="#awards">Awards</a>
-        <a data-nav-link href="#contact">Contact</a>
-        <a class="nav-pill magnetic" href="resume.pdf">tl;dr pdf</a>
+    <audio id="runway-audio" preload="none" loop src="assets/runway-audio.m4a" data-fallback-src="assets/runway-audio.mp3"></audio>
+
+    <div class="vignette" aria-hidden="true"></div>
+
+    <section class="film-overlay" aria-label="Runway Information">
+      <p class="show-label">Industrial Showspace // Season 26</p>
+      <h1 class="name">Muslim Bayemirov</h1>
+      <p class="role">Software Engineering Intern @ BMW Group // Munich</p>
+
+      <nav class="links" aria-label="Primary Links">
+        <a href="resume.pdf">tl;dr pdf</a>
+        <a href="mailto:muslimbayemirov@gmail.com">email</a>
+        <a href="https://www.linkedin.com/in/muzzaleeni/">linkedin</a>
+        <a href="https://t.me/muzzyaqow">telegram</a>
       </nav>
-    </header>
 
-    <section class="hero reveal" id="hero" data-scene="hero" data-light="#7dd4ff">
-      <p class="look-label">Scene 00 / Opening Walk</p>
-      <h1>
-        <span>Build Fast.</span>
-        <span>Ship Real.</span>
-        <span class="accent">Refine Hard.</span>
-      </h1>
-      <p class="hero-copy">
-        this site is staged like a runway: one clear line, strong cues, no dead weight.
-        i build software that moves from prototype to production with speed and clarity.
-      </p>
-      <p class="ticker-line"><span class="ticker-key">now:</span> <span id="ticker">shipping production-grade backend work at bmw group.</span></p>
-      <div class="hero-actions">
-        <a class="btn magnetic" href="#projects">view looks</a>
-        <a class="btn ghost magnetic" href="#contact">book finale</a>
+      <div class="controls">
+        <button id="sound-toggle" class="control-btn" type="button" aria-pressed="false">Sound On</button>
+        <button id="play-toggle" class="control-btn hidden" type="button">Tap to Play Film</button>
       </div>
-    </section>
 
-    <section class="look look-left reveal" id="about" data-scene="about" data-light="#f9c74f">
-      <p class="look-label">Scene 01 / About</p>
-      <h2>I optimize for momentum without sacrificing engineering standards.</h2>
-      <p>
-        i prefer reality-tested systems over slide-deck architecture. ship quickly, observe behavior,
-        remove friction, repeat.
-      </p>
-      <p>
-        my default mode is pragmatic execution: clear boundaries, clean data flow, and product-aware implementation.
-      </p>
-    </section>
-
-    <section class="look look-right reveal" id="experience" data-scene="experience" data-light="#ff7b72">
-      <p class="look-label">Scene 02 / Experience</p>
-      <h2>From intern roles to measurable outcomes.</h2>
-      <ul class="set-cards">
-        <li class="set-card tilt">
-          <p class="card-title">bmw group</p>
-          <p class="card-meta">software engineering intern / munich</p>
-          <p>contributed to migration planning from local systems to aws, targeting ~EUR 100k savings and a 6-month faster path to delivery.</p>
-        </li>
-        <li class="set-card tilt">
-          <p class="card-title">qazpost</p>
-          <p class="card-meta">backend dev intern / astana</p>
-          <p>built go api with full-text search and jwt auth, tuned postgres performance, automated repetitive ops.</p>
-        </li>
-        <li class="set-card tilt">
-          <p class="card-title">xmoon.ai</p>
-          <p class="card-meta">software intern / remote</p>
-          <p>implemented python telegram onboarding bot and backtested signal strategies.</p>
-        </li>
-      </ul>
-    </section>
-
-    <section class="look look-left reveal" id="projects" data-scene="projects" data-light="#4cc9f0">
-      <p class="look-label">Scene 03 / Projects</p>
-      <h2>Products built under sharp constraints.</h2>
-      <ul class="set-cards projects-grid">
-        <li class="set-card tilt">
-          <p class="card-title">gourmenta</p>
-          <p class="card-meta">python / fastapi / sqlite / next.js</p>
-          <p>scraped ~3gb restaurant data, automated captcha handling, built fast query pipeline, reached lighthouse 100/98 and 100+ users.</p>
-        </li>
-        <li class="set-card tilt">
-          <p class="card-title">dostapp</p>
-          <p class="card-meta">python / fastapi / aws / typescript</p>
-          <p>social dining product in kz; shipped payment integration in 48 hours via fastapi + aws lambda.</p>
-        </li>
-      </ul>
-      <a class="scene-cta magnetic" href="#contact">If this is your pace, let's talk.</a>
-    </section>
-
-    <section class="look look-right reveal" id="awards" data-scene="awards" data-light="#b388ff">
-      <p class="look-label">Scene 04 / Distinctions</p>
-      <h2>Proof of pressure-tested execution.</h2>
-      <ul class="critics-list">
-        <li>selected into the largest incubator in central asia (top-100 / 4k+)</li>
-        <li>best hack for social good by blackrock at jacobshack 2022</li>
-        <li>national gold medalist in algorithmic programming (top-2 / 200+)</li>
-        <li>accepted into largest competitive programming school in cis (top-200 / 2k+)</li>
-      </ul>
-    </section>
-
-    <section class="finale reveal" id="contact" data-scene="contact" data-light="#57f287">
-      <p class="look-label">Scene 05 / Finale</p>
-      <h2>If you need execution speed, let's build.</h2>
-      <div class="lineup">
-        <a class="lineup-link magnetic" href="mailto:muslimbayemirov@gmail.com">email</a>
-        <a class="lineup-link magnetic" href="https://www.linkedin.com/in/muzzaleeni/">linkedin</a>
-        <a class="lineup-link magnetic" href="https://t.me/muzzyaqow">telegram</a>
-      </div>
-      <p class="signature">one html // one css // one js</p>
+      <p id="media-status" class="status" aria-live="polite"></p>
     </section>
   </main>
 

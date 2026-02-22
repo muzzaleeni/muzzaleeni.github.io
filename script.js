@@ -1,278 +1,197 @@
 (() => {
-  document.documentElement.classList.add("js");
+  const SOUND_KEY = "runway_sound";
+  const UNLOCK_KEY = "runway_sound_unlocked";
+  const SYNC_INTERVAL_MS = 1000;
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  const saveData = Boolean(connection && connection.saveData);
-  const shouldEnhance = !reduceMotion && !saveData;
+  const video = document.getElementById("runway-video");
+  const audio = document.getElementById("runway-audio");
+  const soundButton = document.getElementById("sound-toggle");
+  const playButton = document.getElementById("play-toggle");
+  const statusEl = document.getElementById("media-status");
 
-  const hexToRgb = (hex) => {
-    const raw = (hex || "").replace("#", "").trim();
-    if (raw.length !== 6) {
-      return { r: 125, g: 212, b: 255 };
+  if (!video || !audio || !soundButton || !playButton || !statusEl) {
+    return;
+  }
+
+  const setStatus = (message) => {
+    statusEl.textContent = message || "";
+  };
+
+  const prefersMobileVideo = window.matchMedia("(max-width: 768px)").matches;
+  const supportsWebm = video.canPlayType("video/webm") !== "";
+
+  const desiredVideoSrc = (() => {
+    if (prefersMobileVideo && supportsWebm && video.dataset.mobileWebm) {
+      return video.dataset.mobileWebm;
     }
-    return {
-      r: Number.parseInt(raw.slice(0, 2), 16),
-      g: Number.parseInt(raw.slice(2, 4), 16),
-      b: Number.parseInt(raw.slice(4, 6), 16)
-    };
-  };
+    if (prefersMobileVideo && video.dataset.mobileSrc) {
+      return video.dataset.mobileSrc;
+    }
+    if (supportsWebm && video.dataset.desktopWebm) {
+      return video.dataset.desktopWebm;
+    }
+    return video.dataset.desktopSrc || "";
+  })();
 
-  const tickerPhrases = [
-    "shipping production-grade backend work at bmw group.",
-    "turning requirements into deployable systems.",
-    "building fast, then hardening for production.",
-    "optimizing for clarity, reliability, and speed."
-  ];
-
-  const ticker = document.getElementById("ticker");
-  if (ticker && shouldEnhance) {
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let deleting = false;
-
-    const tick = () => {
-      const phrase = tickerPhrases[phraseIndex];
-      if (!deleting) {
-        charIndex += 1;
-        ticker.textContent = phrase.slice(0, charIndex);
-        if (charIndex === phrase.length) {
-          deleting = true;
-          setTimeout(tick, 1300);
-          return;
-        }
-      } else {
-        charIndex -= 1;
-        ticker.textContent = phrase.slice(0, charIndex);
-        if (charIndex === 0) {
-          deleting = false;
-          phraseIndex = (phraseIndex + 1) % tickerPhrases.length;
-        }
-      }
-      setTimeout(tick, deleting ? 30 : 56);
-    };
-
-    ticker.textContent = "";
-    setTimeout(tick, 260);
+  if (desiredVideoSrc) {
+    const current = video.currentSrc || video.getAttribute("src") || "";
+    if (!current.endsWith(desiredVideoSrc)) {
+      video.src = desiredVideoSrc;
+    }
   }
 
-  const revealTargets = document.querySelectorAll(".reveal");
-  const navLinks = Array.from(document.querySelectorAll("[data-nav-link]"));
-  const sceneSections = Array.from(document.querySelectorAll("section[data-scene]"));
-
-  let activeColor = "#7dd4ff";
-
-  const updateScene = (section) => {
-    const scene = section.dataset.scene || "hero";
-    const light = section.dataset.light || "#7dd4ff";
-    const rgb = hexToRgb(light);
-    activeColor = light;
-
-    document.documentElement.style.setProperty("--scene-accent", light);
-    document.documentElement.style.setProperty("--scene-rgb", `${rgb.r}, ${rgb.g}, ${rgb.b}`);
-    document.body.dataset.scene = scene;
-
-    navLinks.forEach((link) => {
-      const href = link.getAttribute("href");
-      link.classList.toggle("active", href === `#${section.id}`);
-    });
-  };
-
-  const initiallyVisible = document.querySelectorAll(".call-sheet.reveal, .hero.reveal");
-  initiallyVisible.forEach((el) => el.classList.add("is-visible"));
-
-  if (sceneSections.length > 0) {
-    updateScene(sceneSections[0]);
+  if (audio.dataset.fallbackSrc && audio.canPlayType("audio/mp4") === "") {
+    audio.src = audio.dataset.fallbackSrc;
   }
 
-  if ("IntersectionObserver" in window) {
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
-        });
-      },
-      { threshold: 0.16 }
-    );
+  let soundEnabled = localStorage.getItem(SOUND_KEY) === "on";
+  const userUnlockedAudio = localStorage.getItem(UNLOCK_KEY) === "1";
+  let syncHandle;
 
-    revealTargets.forEach((target) => revealObserver.observe(target));
-
-    const sceneObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            updateScene(entry.target);
-          }
-        });
-      },
-      { rootMargin: "-42% 0px -42% 0px" }
-    );
-
-    sceneSections.forEach((section) => sceneObserver.observe(section));
-  } else {
-    revealTargets.forEach((target) => target.classList.add("is-visible"));
-  }
-
-  const initPointerInteractions = () => {
-    const magneticTargets = document.querySelectorAll(".magnetic");
-    magneticTargets.forEach((el) => {
-      el.addEventListener("mousemove", (event) => {
-        const rect = el.getBoundingClientRect();
-        const x = event.clientX - rect.left - rect.width / 2;
-        const y = event.clientY - rect.top - rect.height / 2;
-        el.style.transform = `translate(${x * 0.08}px, ${y * 0.08}px)`;
-      });
-
-      el.addEventListener("mouseleave", () => {
-        el.style.transform = "translate(0, 0)";
-      });
-    });
-
-    const tiltCards = document.querySelectorAll(".tilt");
-    tiltCards.forEach((card) => {
-      card.addEventListener("mousemove", (event) => {
-        const rect = card.getBoundingClientRect();
-        const relX = (event.clientX - rect.left) / rect.width;
-        const relY = (event.clientY - rect.top) / rect.height;
-        const rotateY = (relX - 0.5) * 8;
-        const rotateX = (0.5 - relY) * 8;
-        card.style.transform = `perspective(760px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      });
-
-      card.addEventListener("mouseleave", () => {
-        card.style.transform = "perspective(760px) rotateX(0deg) rotateY(0deg)";
-      });
-    });
+  const setSoundButtonState = () => {
+    soundButton.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
+    soundButton.textContent = soundEnabled ? "Sound Off" : "Sound On";
   };
 
-  const initLightingCanvas = () => {
-    const canvas = document.getElementById("light-canvas");
-    if (!canvas) {
+  const safeModulo = (value, duration) => {
+    if (!duration || !Number.isFinite(duration) || duration <= 0) {
+      return 0;
+    }
+    return ((value % duration) + duration) % duration;
+  };
+
+  const syncAudioToVideo = () => {
+    if (!soundEnabled || audio.paused || !Number.isFinite(video.currentTime)) {
       return;
     }
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
+    const desiredTime = audio.duration ? safeModulo(video.currentTime, audio.duration) : video.currentTime;
+    if (!Number.isFinite(desiredTime)) {
       return;
     }
 
-    let width = 0;
-    let height = 0;
-    let animationId;
-    const beams = [
-      { phase: 0.4, speed: 0.0022, width: 90 },
-      { phase: 2.1, speed: 0.0017, width: 70 }
-    ];
-
-    const particles = [];
-    const particleCount = Math.min(48, Math.floor(window.innerWidth / 26));
-
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    const resetParticles = () => {
-      particles.length = 0;
-      for (let i = 0; i < particleCount; i += 1) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.18,
-          vy: Math.random() * 0.34 + 0.05,
-          r: Math.random() * 1.2 + 0.2
-        });
-      }
-    };
-
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-      const rgb = hexToRgb(activeColor);
-
-      beams.forEach((beam, index) => {
-        beam.phase += beam.speed;
-        const lane = Math.sin(beam.phase + index) * 0.5 + 0.5;
-        const x = lane * width;
-        const grad = ctx.createLinearGradient(x - beam.width, 0, x + beam.width, 0);
-        grad.addColorStop(0, "rgba(0, 0, 0, 0)");
-        grad.addColorStop(0.5, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.08)`);
-        grad.addColorStop(0.52, "rgba(255, 255, 255, 0.1)");
-        grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(x - beam.width, 0, beam.width * 2, height);
-      });
-
-      particles.forEach((particle) => {
-        particle.y += particle.vy;
-        particle.x += particle.vx;
-
-        if (particle.y > height + 8) {
-          particle.y = -8;
-          particle.x = Math.random() * width;
-        }
-
-        if (particle.x < -4 || particle.x > width + 4) {
-          particle.vx *= -1;
-        }
-
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.22)`;
-        ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      animationId = requestAnimationFrame(draw);
-    };
-
-    window.addEventListener("resize", () => {
-      resize();
-      resetParticles();
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        cancelAnimationFrame(animationId);
-      } else {
-        draw();
-      }
-    });
-
-    resize();
-    resetParticles();
-    draw();
+    if (Math.abs(audio.currentTime - desiredTime) > 0.35) {
+      audio.currentTime = desiredTime;
+    }
   };
 
-  const startEnhancements = () => {
-    if (!shouldEnhance || document.body.classList.contains("enhanced")) {
+  const startSyncLoop = () => {
+    if (syncHandle) {
+      clearInterval(syncHandle);
+    }
+    syncHandle = setInterval(syncAudioToVideo, SYNC_INTERVAL_MS);
+  };
+
+  const stopSyncLoop = () => {
+    if (syncHandle) {
+      clearInterval(syncHandle);
+      syncHandle = undefined;
+    }
+  };
+
+  const attemptVideoAutoplay = async () => {
+    try {
+      await video.play();
+      playButton.classList.add("hidden");
+      setStatus("");
+    } catch (error) {
+      playButton.classList.remove("hidden");
+      setStatus("Tap to start the runway film.");
+    }
+  };
+
+  const startAudio = async () => {
+    syncAudioToVideo();
+    try {
+      await audio.play();
+      setStatus("");
+      startSyncLoop();
+      return true;
+    } catch (error) {
+      soundEnabled = false;
+      setSoundButtonState();
+      localStorage.setItem(SOUND_KEY, "off");
+      setStatus("Sound is blocked until a direct user gesture.");
+      stopSyncLoop();
+      return false;
+    }
+  };
+
+  const stopAudio = () => {
+    audio.pause();
+    stopSyncLoop();
+  };
+
+  const applySoundPreference = async () => {
+    setSoundButtonState();
+
+    if (!soundEnabled) {
+      stopAudio();
       return;
     }
 
-    document.body.classList.add("enhanced");
-    initPointerInteractions();
-    initLightingCanvas();
+    if (!userUnlockedAudio) {
+      soundEnabled = false;
+      setSoundButtonState();
+      localStorage.setItem(SOUND_KEY, "off");
+      return;
+    }
+
+    await startAudio();
   };
 
-  if (shouldEnhance) {
-    const scheduleEnhancements = () => {
-      if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(startEnhancements, { timeout: 1500 });
-      } else {
-        setTimeout(startEnhancements, 900);
-      }
-    };
+  soundButton.addEventListener("click", async () => {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem(SOUND_KEY, soundEnabled ? "on" : "off");
 
-    if (document.readyState === "complete") {
-      scheduleEnhancements();
+    if (soundEnabled) {
+      localStorage.setItem(UNLOCK_KEY, "1");
+      await startAudio();
     } else {
-      window.addEventListener("load", scheduleEnhancements, { once: true });
+      stopAudio();
+      setStatus("");
+      setSoundButtonState();
     }
-  }
+
+    setSoundButtonState();
+  });
+
+  playButton.addEventListener("click", async () => {
+    await attemptVideoAutoplay();
+    if (soundEnabled) {
+      await startAudio();
+      setSoundButtonState();
+    }
+  });
+
+  video.addEventListener("seeked", syncAudioToVideo);
+  video.addEventListener("playing", syncAudioToVideo);
+  video.addEventListener("ended", syncAudioToVideo);
+
+  document.addEventListener("visibilitychange", async () => {
+    if (document.hidden) {
+      if (!audio.paused) {
+        audio.pause();
+      }
+      return;
+    }
+
+    if (soundEnabled) {
+      await startAudio();
+    }
+  });
+
+  video.addEventListener("error", () => {
+    setStatus("Runway video file is missing. Add files to /assets as documented.");
+  });
+
+  audio.addEventListener("error", () => {
+    if (soundEnabled) {
+      setStatus("Runway audio file is missing. Add files to /assets as documented.");
+    }
+  });
+
+  setSoundButtonState();
+  attemptVideoAutoplay();
+  applySoundPreference();
 })();
