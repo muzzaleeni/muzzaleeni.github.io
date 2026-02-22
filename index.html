@@ -29,27 +29,27 @@
     <audio id="runway-audio" preload="none" loop src="assets/runway-audio.m4a" data-fallback-src="assets/runway-audio.mp3"></audio>
 
     <div class="vignette" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
 
-    <section class="intro-title" aria-label="Intro">
+    <section class="intro-title" aria-label="Identity">
       <h1>MUSLIMBAYEMIROV</h1>
       <p>Software Engineering Intern @ BMW Group</p>
+      <p class="city">Munich</p>
     </section>
 
-    <section class="contact-rail" aria-label="Contact and controls">
-      <nav class="links" aria-label="Primary Links">
-        <a href="resume.pdf">tl;dr pdf</a>
-        <a href="mailto:muslimbayemirov@gmail.com">email</a>
-        <a href="https://www.linkedin.com/in/muzzaleeni/">linkedin</a>
-        <a href="https://t.me/muzzyaqow">telegram</a>
-      </nav>
+    <nav class="links" aria-label="Primary Links">
+      <a href="resume.pdf">resume</a>
+      <span aria-hidden="true">/</span>
+      <a href="https://www.linkedin.com/in/muzzaleeni/">linkedin</a>
+      <span aria-hidden="true">/</span>
+      <a href="mailto:muslimbayemirov@gmail.com">email</a>
+    </nav>
 
-      <div class="controls">
-        <button id="sound-toggle" class="control-btn" type="button" aria-pressed="false">Sound On</button>
-        <button id="play-toggle" class="control-btn hidden" type="button">Tap to Play Film</button>
-      </div>
+    <div id="timecode" class="timecode" aria-live="off">00:00 / 00:00</div>
 
-      <p id="media-status" class="status" aria-live="polite"></p>
-    </section>
+    <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="false">sound on</button>
+
+    <p id="media-status" class="status" aria-live="polite"></p>
   </main>
 
   <script src="script.js" defer></script>

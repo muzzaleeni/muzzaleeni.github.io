@@ -1,21 +1,48 @@
 (() => {
   const SOUND_KEY = "runway_sound";
   const UNLOCK_KEY = "runway_sound_unlocked";
-  const SYNC_INTERVAL_MS = 1000;
+  const SYNC_INTERVAL_MS = 2000;
   const INTRO_DELAY_MS = 1000;
+  const INPUT_DEDUP_MS = 450;
 
+  const stage = document.querySelector(".film-stage");
   const video = document.getElementById("runway-video");
   const audio = document.getElementById("runway-audio");
   const soundButton = document.getElementById("sound-toggle");
-  const playButton = document.getElementById("play-toggle");
   const statusEl = document.getElementById("media-status");
+  const timecodeEl = document.getElementById("timecode");
 
-  if (!video || !audio || !soundButton || !playButton || !statusEl) {
+  if (!stage || !video || !audio || !soundButton || !statusEl || !timecodeEl) {
     return;
   }
 
   const setStatus = (message) => {
     statusEl.textContent = message || "";
+  };
+
+  const readStorage = (key) => {
+    try {
+      return window.localStorage.getItem(key);
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const writeStorage = (key, value) => {
+    const commit = () => {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (error) {
+        // Ignore storage write failures in privacy mode.
+      }
+    };
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(commit, { timeout: 800 });
+      return;
+    }
+
+    setTimeout(commit, 0);
   };
 
   const prefersMobileVideo = window.matchMedia("(max-width: 768px)").matches;
@@ -45,14 +72,31 @@
     audio.src = audio.dataset.fallbackSrc;
   }
 
-  let soundEnabled = localStorage.getItem(SOUND_KEY) === "on";
-  const userUnlockedAudio = localStorage.getItem(UNLOCK_KEY) === "1";
+  let soundEnabled = readStorage(SOUND_KEY) === "on";
+  let userUnlockedAudio = readStorage(UNLOCK_KEY) === "1";
   let syncHandle;
   let videoSyncEnabled = true;
+  let needsGestureForPlayback = false;
 
   const setSoundButtonState = () => {
     soundButton.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
-    soundButton.textContent = soundEnabled ? "Sound Off" : "Sound On";
+    soundButton.textContent = soundEnabled ? "sound off" : "sound on";
+  };
+
+  const pad2 = (value) => String(Math.max(0, value)).padStart(2, "0");
+
+  const formatTimecode = (seconds) => {
+    if (!Number.isFinite(seconds) || seconds < 0) {
+      return "00:00";
+    }
+    const total = Math.floor(seconds);
+    return `${pad2(Math.floor(total / 60))}:${pad2(total % 60)}`;
+  };
+
+  const updateTimecode = () => {
+    const current = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+    const duration = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 0;
+    timecodeEl.textContent = `${formatTimecode(current)} / ${formatTimecode(duration)}`;
   };
 
   const safeModulo = (value, duration) => {
@@ -63,7 +107,7 @@
   };
 
   const syncAudioToVideo = () => {
-    if (!soundEnabled || audio.paused || !videoSyncEnabled) {
+    if (!soundEnabled || audio.paused || !videoSyncEnabled || audio.readyState < 1) {
       return;
     }
 
@@ -82,8 +126,12 @@
       return;
     }
 
-    if (Math.abs(audio.currentTime - desiredTime) > 0.35) {
-      audio.currentTime = desiredTime;
+    if (Math.abs(audio.currentTime - desiredTime) > 0.45) {
+      if (typeof audio.fastSeek === "function") {
+        audio.fastSeek(desiredTime);
+      } else {
+        audio.currentTime = desiredTime;
+      }
     }
   };
 
@@ -105,32 +153,18 @@
     document.body.classList.add("video-live");
   };
 
-  const attemptVideoAutoplay = async () => {
-    try {
-      await video.play();
-      markVideoLive();
-      playButton.classList.add("hidden");
-      setStatus("");
-      return true;
-    } catch (error) {
-      playButton.classList.remove("hidden");
-      setStatus("Tap to start the runway film.");
-      return false;
-    }
-  };
-
   const startAudio = async () => {
-    syncAudioToVideo();
     try {
       await audio.play();
       setStatus("");
       startSyncLoop();
+      requestAnimationFrame(syncAudioToVideo);
       return true;
     } catch (error) {
       soundEnabled = false;
       setSoundButtonState();
-      localStorage.setItem(SOUND_KEY, "off");
-      setStatus("Sound is blocked until a direct user gesture.");
+      writeStorage(SOUND_KEY, "off");
+      setStatus("Sound is blocked until direct interaction.");
       stopSyncLoop();
       return false;
     }
@@ -139,6 +173,20 @@
   const stopAudio = () => {
     audio.pause();
     stopSyncLoop();
+  };
+
+  const attemptVideoAutoplay = async () => {
+    try {
+      await video.play();
+      markVideoLive();
+      setStatus("");
+      needsGestureForPlayback = false;
+      return true;
+    } catch (error) {
+      needsGestureForPlayback = true;
+      setStatus("Tap anywhere to start film.");
+      return false;
+    }
   };
 
   const applySoundPreference = async () => {
@@ -152,43 +200,88 @@
     if (!userUnlockedAudio) {
       soundEnabled = false;
       setSoundButtonState();
-      localStorage.setItem(SOUND_KEY, "off");
+      writeStorage(SOUND_KEY, "off");
       return;
     }
 
     await startAudio();
   };
 
-  soundButton.addEventListener("click", async () => {
+  const handleSoundToggle = async () => {
     soundEnabled = !soundEnabled;
-    localStorage.setItem(SOUND_KEY, soundEnabled ? "on" : "off");
+    writeStorage(SOUND_KEY, soundEnabled ? "on" : "off");
+    setSoundButtonState();
 
     if (soundEnabled) {
-      localStorage.setItem(UNLOCK_KEY, "1");
+      userUnlockedAudio = true;
+      writeStorage(UNLOCK_KEY, "1");
       await startAudio();
-    } else {
-      stopAudio();
-      setStatus("");
-      setSoundButtonState();
+      return;
     }
 
-    setSoundButtonState();
-  });
+    stopAudio();
+    setStatus(needsGestureForPlayback ? "Tap anywhere to start film." : "");
+  };
 
-  playButton.addEventListener("click", async () => {
+  const handleFirstPaintGesture = async () => {
+    if (!needsGestureForPlayback) {
+      return;
+    }
+
     const started = await attemptVideoAutoplay();
     if (started && soundEnabled) {
       await startAudio();
       setSoundButtonState();
     }
+  };
+
+  const bindFastActivate = (element, handler) => {
+    let lastPointerTime = -Infinity;
+
+    element.addEventListener(
+      "pointerup",
+      (event) => {
+        if (event.button !== 0) {
+          return;
+        }
+        lastPointerTime = performance.now();
+        handler();
+      },
+      { passive: true }
+    );
+
+    element.addEventListener("click", () => {
+      if (performance.now() - lastPointerTime < INPUT_DEDUP_MS) {
+        return;
+      }
+      handler();
+    });
+  };
+
+  bindFastActivate(soundButton, handleSoundToggle);
+
+  stage.addEventListener("pointerup", handleFirstPaintGesture, { passive: true });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      handleFirstPaintGesture();
+    }
   });
 
-  video.addEventListener("seeked", syncAudioToVideo);
-  video.addEventListener("playing", () => {
-    markVideoLive();
+  video.addEventListener("timeupdate", () => {
+    updateTimecode();
     syncAudioToVideo();
   });
-  video.addEventListener("ended", syncAudioToVideo);
+  video.addEventListener("durationchange", updateTimecode);
+  video.addEventListener("loadedmetadata", updateTimecode);
+  video.addEventListener("seeked", () => {
+    updateTimecode();
+    syncAudioToVideo();
+  });
+  video.addEventListener("playing", () => {
+    markVideoLive();
+    updateTimecode();
+    syncAudioToVideo();
+  });
 
   document.addEventListener("visibilitychange", async () => {
     if (document.hidden) {
@@ -205,16 +298,17 @@
 
   video.addEventListener("error", () => {
     videoSyncEnabled = false;
-    setStatus("Runway video file is missing. Add files to /assets as documented.");
+    setStatus("Runway video file is missing. Add files to /assets.");
   });
 
   audio.addEventListener("error", () => {
     if (soundEnabled) {
-      setStatus("Runway audio file is missing. Add files to /assets as documented.");
+      setStatus("Runway audio file is missing. Add files to /assets.");
     }
   });
 
   setSoundButtonState();
+  updateTimecode();
 
   setTimeout(async () => {
     await attemptVideoAutoplay();
