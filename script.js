@@ -4,6 +4,7 @@
   const SYNC_INTERVAL_MS = 2000;
   const INTRO_DELAY_MS = 1000;
   const INPUT_DEDUP_MS = 450;
+  const TIMECODE_UPDATE_MS = 250;
 
   const stage = document.querySelector(".film-stage");
   const video = document.getElementById("scene-video");
@@ -107,6 +108,9 @@
   let syncHandle;
   let videoSyncEnabled = true;
   let needsGestureForPlayback = false;
+  let lastTimecodeUpdateAt = 0;
+  let lastTimecodeCurrent = -1;
+  let lastTimecodeDuration = -1;
 
   const setSoundButtonState = () => {
     soundButton.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
@@ -123,9 +127,25 @@
     return `${pad2(Math.floor(total / 60))}:${pad2(total % 60)}`;
   };
 
-  const updateTimecode = () => {
+  const updateTimecode = (force = false) => {
     const current = Number.isFinite(video.currentTime) ? video.currentTime : 0;
     const duration = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 0;
+    const now = performance.now();
+    const currentWhole = Math.floor(current);
+    const durationWhole = Math.floor(duration);
+
+    if (
+      !force &&
+      now - lastTimecodeUpdateAt < TIMECODE_UPDATE_MS &&
+      currentWhole === lastTimecodeCurrent &&
+      durationWhole === lastTimecodeDuration
+    ) {
+      return;
+    }
+
+    lastTimecodeUpdateAt = now;
+    lastTimecodeCurrent = currentWhole;
+    lastTimecodeDuration = durationWhole;
     timecodeEl.textContent = `${formatTimecode(current)} / ${formatTimecode(duration)}`;
   };
 
@@ -321,18 +341,17 @@
   });
 
   video.addEventListener("timeupdate", () => {
-    updateTimecode();
-    syncAudioToVideo();
+    updateTimecode(false);
   });
-  video.addEventListener("durationchange", updateTimecode);
-  video.addEventListener("loadedmetadata", updateTimecode);
+  video.addEventListener("durationchange", () => updateTimecode(true));
+  video.addEventListener("loadedmetadata", () => updateTimecode(true));
   video.addEventListener("seeked", () => {
-    updateTimecode();
+    updateTimecode(true);
     syncAudioToVideo();
   });
   video.addEventListener("playing", () => {
     markVideoLive();
-    updateTimecode();
+    updateTimecode(true);
     syncAudioToVideo();
   });
 

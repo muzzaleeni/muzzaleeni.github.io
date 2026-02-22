@@ -93,6 +93,7 @@ body.video-live .vignette {
   mix-blend-mode: soft-light;
   animation: grain-shift 7s steps(8) infinite;
   will-change: transform;
+  contain: paint;
 }
 
 @keyframes grain-shift {
@@ -328,6 +329,12 @@ body.video-live .vignette {
   .film-stage {
     height: 100svh;
     min-height: 100svh;
+    touch-action: manipulation;
+  }
+
+  .grain {
+    animation: none;
+    opacity: 0.035;
   }
 
   .intro-title {
@@ -391,6 +398,13 @@ body.video-live .vignette {
     left: calc(0.68rem + env(safe-area-inset-left));
     bottom: calc(var(--timecode-bottom-desktop) + env(safe-area-inset-bottom));
     font-size: 0.7rem;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .grain {
+    animation: none;
+    opacity: 0.03;
   }
 }
 
