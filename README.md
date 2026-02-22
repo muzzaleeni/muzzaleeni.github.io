@@ -1,16 +1,16 @@
 # Personal website
 
-Creative single-page website built with plain HTML, CSS, and vanilla JS.
+Runway-inspired single-page personal website built with plain HTML, CSS, and vanilla JS.
 
 ## Structure
 
-- `index.html` single-page content and semantic sections
-- `styles.css` visual design system and responsive layout
-- `script.js` animation + interaction layer (canvas background, reveals, nav state)
+- `index.html` scene-based content layout
+- `styles.css` industrial showspace art direction and responsive styling
+- `script.js` scene cues, nav state, and canvas lighting effects
 - `resume.pdf` downloadable CV
 
 ## Design direction
 
-- Living Manifesto: bold typography, scene-based storytelling, kinetic visuals
+- Industrial Showspace: central runway, alternating scene wings, lighting cues
 - Zero frameworks, zero build step
-- Hand-editable and deployment-simple
+- One-page narrative with quick recruiter navigation

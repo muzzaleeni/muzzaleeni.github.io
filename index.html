@@ -4,11 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Muslim Bayemirov | Living Manifesto</title>
-  <meta name="description" content="Muslim Bayemirov - data analyst and software builder. A creative single-page manifesto.">
+  <title>Muslim Bayemirov | Industrial Showspace</title>
+  <meta name="description" content="Muslim Bayemirov - software engineering intern at BMW Group. Runway-inspired personal website.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Chivo:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 
   <!-- Google tag (gtag.js) -->
@@ -17,158 +17,121 @@
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-35TFTR7CRC');
   </script>
 </head>
 
-<body>
-  <canvas id="signal-canvas" aria-hidden="true"></canvas>
-  <div class="gradient-halo" aria-hidden="true"></div>
+<body data-scene="hero">
+  <canvas id="light-canvas" aria-hidden="true"></canvas>
+  <div class="runway-spine" aria-hidden="true"></div>
 
-  <main class="manifesto">
-    <header class="top-bar reveal">
-      <a class="brand magnetic" href="#top">muslim bayemirov</a>
-      <p class="brand-meta">data + software + execution</p>
-      <nav class="floating-nav" aria-label="Primary">
+  <main class="show">
+    <header class="call-sheet reveal">
+      <p class="sheet-id">industrial showspace // season 26</p>
+      <div class="sheet-row">
+        <a class="brand magnetic" href="#top">muslim bayemirov</a>
+        <p class="sheet-role">software engineering intern @ bmw group // munich</p>
+      </div>
+      <nav class="quick-nav" aria-label="Scene Index">
         <a data-nav-link href="#about">about</a>
-        <a data-nav-link href="#education">education</a>
         <a data-nav-link href="#experience">experience</a>
         <a data-nav-link href="#projects">projects</a>
         <a data-nav-link href="#awards">awards</a>
-        <a data-nav-link href="#skills">skills</a>
         <a data-nav-link href="#contact">contact</a>
         <a class="nav-pill magnetic" href="resume.pdf">tl;dr pdf</a>
       </nav>
     </header>
 
-    <section class="hero reveal" id="hero">
-      <p class="hero-kicker">living manifesto / 2026</p>
-      <h1 class="hero-title">
-        <span class="title-line">BUILD FAST.</span>
-        <span class="title-line">MAKE IT</span>
-        <span class="title-line accent">UNIGNORABLE.</span>
+    <section class="hero reveal" id="hero" data-scene="hero" data-light="#7dd4ff">
+      <p class="look-label">scene 00 / opening walk</p>
+      <h1>
+        <span>BUILD FAST.</span>
+        <span>SHIP REAL.</span>
+        <span class="accent">REFINE HARD.</span>
       </h1>
       <p class="hero-copy">
-        hey, muslim here. currently crunching numbers as a data analyst intern at bmw group in munich.
-        i care about execution velocity, clear systems, and products that do real work.
+        this site is staged like a runway: one clear line, strong cues, no dead weight.
+        i build software that moves from prototype to production with speed and clarity.
       </p>
-      <p class="live-line">
-        <span class="label">now:</span>
-        <span id="ticker">shipping practical analytics.</span>
-      </p>
+      <p class="ticker-line"><span class="ticker-key">now:</span> <span id="ticker">shipping production-grade backend work at bmw group.</span></p>
       <div class="hero-actions">
-        <a class="btn magnetic" href="#projects">view projects</a>
-        <a class="btn ghost magnetic" href="#contact">let's collaborate</a>
+        <a class="btn magnetic" href="#projects">view looks</a>
+        <a class="btn ghost magnetic" href="#contact">book finale</a>
       </div>
     </section>
 
-    <section class="scene reveal" id="about" data-section="about">
-      <p class="scene-index">01 / about</p>
-      <h2 class="scene-title">I iterate in public and improve in production.</h2>
-      <div class="scene-grid">
-        <p>i prefer shipping real behavior over polishing hypothetical architecture. build, test with reality, then sharpen.</p>
-        <p>my zone is where data, backend systems, and product judgment intersect. i optimize for momentum without sacrificing clarity.</p>
-      </div>
+    <section class="look look-left reveal" id="about" data-scene="about" data-light="#f9c74f">
+      <p class="look-label">scene 01 / about</p>
+      <h2>i optimize for momentum without sacrificing engineering standards.</h2>
+      <p>
+        i prefer reality-tested systems over slide-deck architecture. ship quickly, observe behavior,
+        remove friction, repeat.
+      </p>
+      <p>
+        my default mode is pragmatic execution: clear boundaries, clean data flow, and product-aware implementation.
+      </p>
     </section>
 
-    <section class="scene reveal" id="education" data-section="education">
-      <p class="scene-index">02 / education</p>
-      <h2 class="scene-title">Computer science fundamentals, applied with product pressure.</h2>
-      <ul class="cards compact">
-        <li class="card">
-          <p class="card-title">B.Sc. in Computer Science</p>
-          <p class="card-meta">constructor university, bremen</p>
+    <section class="look look-right reveal" id="experience" data-scene="experience" data-light="#ff7b72">
+      <p class="look-label">scene 02 / experience</p>
+      <h2>from intern roles to measurable outcomes.</h2>
+      <ul class="set-cards">
+        <li class="set-card tilt">
+          <p class="card-title">bmw group</p>
+          <p class="card-meta">software engineering intern / munich</p>
+          <p>contributed to migration planning from local systems to aws, targeting ~EUR 100k savings and a 6-month faster path to delivery.</p>
         </li>
-        <li class="card">
-          <p class="card-title">Focus Areas</p>
-          <p class="card-meta">c/c++, databases, web systems, systems-level experiments</p>
-        </li>
-        <li class="card">
-          <p class="card-title">Thesis</p>
-          <p class="card-meta">unikernels and minimal runtime architecture</p>
-        </li>
-      </ul>
-    </section>
-
-    <section class="scene reveal" id="experience" data-section="experience">
-      <p class="scene-index">03 / experience</p>
-      <h2 class="scene-title">From prototypes to measurable impact.</h2>
-      <ul class="cards">
-        <li class="card tilt">
-          <p class="card-title">BMW Group</p>
-          <p class="card-meta">data &amp; software intern / munich</p>
-          <p>helped prepare migration of local data workflows to aws, targeting ~€100k savings and about 6 months faster delivery.</p>
-        </li>
-        <li class="card tilt">
-          <p class="card-title">Qazpost</p>
+        <li class="set-card tilt">
+          <p class="card-title">qazpost</p>
           <p class="card-meta">backend dev intern / astana</p>
-          <p>built go api with full-text search + jwt auth, tuned postgres, and automated repetitive operations.</p>
+          <p>built go api with full-text search and jwt auth, tuned postgres performance, automated repetitive ops.</p>
         </li>
-        <li class="card tilt">
+        <li class="set-card tilt">
           <p class="card-title">xmoon.ai</p>
           <p class="card-meta">software intern / remote</p>
-          <p>built python telegram onboarding bot and backtested crypto trading signals.</p>
+          <p>implemented python telegram onboarding bot and backtested signal strategies.</p>
         </li>
       </ul>
     </section>
 
-    <section class="scene reveal" id="projects" data-section="projects">
-      <p class="scene-index">04 / projects</p>
-      <h2 class="scene-title">I like products with sharp constraints and fast feedback loops.</h2>
-      <ul class="cards">
-        <li class="card tilt">
+    <section class="look look-left reveal" id="projects" data-scene="projects" data-light="#4cc9f0">
+      <p class="look-label">scene 03 / projects</p>
+      <h2>products built under sharp constraints.</h2>
+      <ul class="set-cards projects-grid">
+        <li class="set-card tilt">
           <p class="card-title">gourmenta</p>
-          <p class="card-meta">python, fastapi, sqlite, next.js</p>
-          <p>scraped ~3gb restaurant data, automated captcha flow, built fast query pipeline, reached lighthouse 100/98 and 100+ users.</p>
+          <p class="card-meta">python / fastapi / sqlite / next.js</p>
+          <p>scraped ~3gb restaurant data, automated captcha handling, built fast query pipeline, reached lighthouse 100/98 and 100+ users.</p>
         </li>
-        <li class="card tilt">
+        <li class="set-card tilt">
           <p class="card-title">dostapp</p>
-          <p class="card-meta">python, fastapi, aws, typescript</p>
-          <p>social dining platform in kz; shipped payment integration in 48 hours via fastapi + aws lambda.</p>
+          <p class="card-meta">python / fastapi / aws / typescript</p>
+          <p>social dining product in kz; shipped payment integration in 48 hours via fastapi + aws lambda.</p>
         </li>
       </ul>
+      <a class="scene-cta magnetic" href="#contact">if this is your pace, let's talk</a>
     </section>
 
-    <section class="scene reveal" id="awards" data-section="awards">
-      <p class="scene-index">05 / awards</p>
-      <h2 class="scene-title">Proof that I can compete, ship, and execute under pressure.</h2>
-      <ul class="manifest-list">
-        <li>selected into largest incubator in central asia (top-100 / 4k+)</li>
+    <section class="look look-right reveal" id="awards" data-scene="awards" data-light="#b388ff">
+      <p class="look-label">scene 04 / distinctions</p>
+      <h2>proof of pressure-tested execution.</h2>
+      <ul class="critics-list">
+        <li>selected into the largest incubator in central asia (top-100 / 4k+)</li>
         <li>best hack for social good by blackrock at jacobshack 2022</li>
         <li>national gold medalist in algorithmic programming (top-2 / 200+)</li>
         <li>accepted into largest competitive programming school in cis (top-200 / 2k+)</li>
       </ul>
     </section>
 
-    <section class="scene reveal" id="skills" data-section="skills">
-      <p class="scene-index">06 / skills</p>
-      <h2 class="scene-title">Tooling that helps me move quickly and cleanly.</h2>
-      <div class="chip-groups">
-        <div class="chip-block">
-          <p class="chip-title">languages</p>
-          <p>python / go / c-c++ / sql / javascript / typescript / java / php / html-css</p>
-        </div>
-        <div class="chip-block">
-          <p class="chip-title">platforms</p>
-          <p>fastapi / postgresql / aws / mongodb / react / next.js / spring boot</p>
-        </div>
-        <div class="chip-block">
-          <p class="chip-title">ops + tools</p>
-          <p>linux / git / firebase / jira / automation-first workflows</p>
-        </div>
+    <section class="finale reveal" id="contact" data-scene="contact" data-light="#57f287">
+      <p class="look-label">scene 05 / finale</p>
+      <h2>if you need execution speed, let's build.</h2>
+      <div class="lineup">
+        <a class="lineup-link magnetic" href="mailto:muslimbayemirov@gmail.com">email</a>
+        <a class="lineup-link magnetic" href="https://www.linkedin.com/in/muzzaleeni/">linkedin</a>
+        <a class="lineup-link magnetic" href="https://t.me/muzzyaqow">telegram</a>
       </div>
-    </section>
-
-    <section class="scene scene-contact reveal" id="contact" data-section="contact">
-      <p class="scene-index">07 / contact</p>
-      <h2 class="scene-title">If you need execution speed, let's build.</h2>
-      <div class="contact-grid">
-        <a class="contact-link magnetic" href="mailto:muslimbayemirov@gmail.com">email</a>
-        <a class="contact-link magnetic" href="https://www.linkedin.com/in/muzzaleeni/">linkedin</a>
-        <a class="contact-link magnetic" href="https://t.me/muzzyaqow">telegram</a>
-      </div>
-      <p class="signature">crafted with one html, one css, one js.</p>
+      <p class="signature">one html // one css // one js</p>
     </section>
   </main>
 
