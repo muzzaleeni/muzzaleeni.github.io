@@ -152,6 +152,33 @@ body.video-live .vignette {
   text-transform: uppercase;
 }
 
+.current-note {
+  position: absolute;
+  left: 50%;
+  top: min(62.5vh, 63%);
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(0.8rem, 1vw, 0.93rem);
+  letter-spacing: 0.09em;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.current-note a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.current-note a:hover,
+.current-note a:focus-visible {
+  color: #fff;
+  border-color: var(--line-soft);
+}
+
 .links {
   position: absolute;
   left: 50%;
@@ -284,6 +311,12 @@ body.video-live .vignette {
     font-size: 0.86rem;
   }
 
+  .current-note {
+    top: min(65.5vh, 67%);
+    font-size: 0.82rem;
+    letter-spacing: 0.07em;
+  }
+
   .status {
     bottom: calc(4.45rem + env(safe-area-inset-bottom));
     font-size: 0.72rem;
@@ -316,12 +349,19 @@ body.video-live .vignette {
   .intro-title p {
     font-size: 0.9rem;
   }
+
+  .current-note {
+    top: min(66.5vh, 69%);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .scene-video,
   .vignette,
   .sound-toggle,
+  .current-note a,
   .links a {
     transition: none;
   }
