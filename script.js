@@ -304,13 +304,15 @@
       return;
     }
 
-    if (
-      event.key.toLowerCase() === "r" &&
+    const isResumeHotkey =
+      (event.code === "KeyR" || event.key.toLowerCase() === "r") &&
       !event.metaKey &&
       !event.ctrlKey &&
-      !event.altKey
-    ) {
-      window.open("resume.pdf", "_blank", "noopener,noreferrer");
+      !event.altKey;
+
+    if (isResumeHotkey) {
+      event.preventDefault();
+      window.location.assign("resume.pdf");
       return;
     }
 
