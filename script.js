@@ -47,6 +47,7 @@
   let soundEnabled = localStorage.getItem(SOUND_KEY) === "on";
   const userUnlockedAudio = localStorage.getItem(UNLOCK_KEY) === "1";
   let syncHandle;
+  let videoSyncEnabled = true;
 
   const setSoundButtonState = () => {
     soundButton.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
@@ -61,7 +62,17 @@
   };
 
   const syncAudioToVideo = () => {
-    if (!soundEnabled || audio.paused || !Number.isFinite(video.currentTime)) {
+    if (!soundEnabled || audio.paused || !videoSyncEnabled) {
+      return;
+    }
+
+    if (
+      video.paused ||
+      video.readyState < 2 ||
+      !Number.isFinite(video.duration) ||
+      video.duration <= 0 ||
+      !Number.isFinite(video.currentTime)
+    ) {
       return;
     }
 
@@ -182,6 +193,7 @@
   });
 
   video.addEventListener("error", () => {
+    videoSyncEnabled = false;
     setStatus("Runway video file is missing. Add files to /assets as documented.");
   });
 
