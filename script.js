@@ -3,8 +3,7 @@
   const UNLOCK_KEY = "site_sound_unlocked";
   const SYNC_INTERVAL_MS = 2000;
   const INTRO_DELAY_MS = 1000;
-  const INPUT_DEDUP_MS = 450;
-  const TIMECODE_UPDATE_MS = 250;
+  const TIMECODE_TICK_MS = 1000;
 
   const stage = document.querySelector(".film-stage");
   const video = document.getElementById("scene-video");
@@ -106,11 +105,11 @@
   let soundEnabled = readStorage(SOUND_KEY) === "on";
   let userUnlockedAudio = readStorage(UNLOCK_KEY) === "1";
   let syncHandle;
+  let timecodeHandle;
   let videoSyncEnabled = true;
   let needsGestureForPlayback = false;
-  let lastTimecodeUpdateAt = 0;
-  let lastTimecodeCurrent = -1;
-  let lastTimecodeDuration = -1;
+  let firstGestureInFlight = false;
+  let lastTimecodeText = "";
 
   const setSoundButtonState = () => {
     soundButton.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
@@ -127,26 +126,15 @@
     return `${pad2(Math.floor(total / 60))}:${pad2(total % 60)}`;
   };
 
-  const updateTimecode = (force = false) => {
+  const updateTimecode = () => {
     const current = Number.isFinite(video.currentTime) ? video.currentTime : 0;
     const duration = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 0;
-    const now = performance.now();
-    const currentWhole = Math.floor(current);
-    const durationWhole = Math.floor(duration);
-
-    if (
-      !force &&
-      now - lastTimecodeUpdateAt < TIMECODE_UPDATE_MS &&
-      currentWhole === lastTimecodeCurrent &&
-      durationWhole === lastTimecodeDuration
-    ) {
+    const nextValue = `${formatTimecode(current)} / ${formatTimecode(duration)}`;
+    if (nextValue === lastTimecodeText) {
       return;
     }
-
-    lastTimecodeUpdateAt = now;
-    lastTimecodeCurrent = currentWhole;
-    lastTimecodeDuration = durationWhole;
-    timecodeEl.textContent = `${formatTimecode(current)} / ${formatTimecode(duration)}`;
+    lastTimecodeText = nextValue;
+    timecodeEl.textContent = nextValue;
   };
 
   const safeModulo = (value, duration) => {
@@ -196,6 +184,21 @@
     if (syncHandle) {
       clearInterval(syncHandle);
       syncHandle = undefined;
+    }
+  };
+
+  const startTimecodeLoop = () => {
+    if (timecodeHandle) {
+      clearInterval(timecodeHandle);
+    }
+    updateTimecode();
+    timecodeHandle = setInterval(updateTimecode, TIMECODE_TICK_MS);
+  };
+
+  const stopTimecodeLoop = () => {
+    if (timecodeHandle) {
+      clearInterval(timecodeHandle);
+      timecodeHandle = undefined;
     }
   };
 
@@ -257,7 +260,7 @@
     await startAudio();
   };
 
-  const handleSoundToggle = async () => {
+  const handleSoundToggle = () => {
     soundEnabled = !soundEnabled;
     writeStorage(SOUND_KEY, soundEnabled ? "on" : "off");
     setSoundButtonState();
@@ -265,7 +268,7 @@
     if (soundEnabled) {
       userUnlockedAudio = true;
       writeStorage(UNLOCK_KEY, "1");
-      await startAudio();
+      void startAudio();
       return;
     }
 
@@ -273,42 +276,23 @@
     setStatus(needsGestureForPlayback ? "Tap anywhere to start film." : "");
   };
 
-  const handleFirstPaintGesture = async () => {
-    if (!needsGestureForPlayback) {
+  const handleFirstPaintGesture = () => {
+    if (!needsGestureForPlayback || firstGestureInFlight) {
       return;
     }
 
-    const started = await attemptVideoAutoplay();
-    if (started && soundEnabled) {
-      await startAudio();
-      setSoundButtonState();
-    }
-  };
-
-  const bindFastActivate = (element, handler) => {
-    let lastPointerTime = -Infinity;
-
-    element.addEventListener(
-      "pointerup",
-      (event) => {
-        if (event.button !== 0) {
-          return;
-        }
-        lastPointerTime = performance.now();
-        handler();
-      },
-      { passive: true }
-    );
-
-    element.addEventListener("click", () => {
-      if (performance.now() - lastPointerTime < INPUT_DEDUP_MS) {
-        return;
+    firstGestureInFlight = true;
+    void (async () => {
+      const started = await attemptVideoAutoplay();
+      if (started && soundEnabled) {
+        await startAudio();
+        setSoundButtonState();
       }
-      handler();
-    });
+      firstGestureInFlight = false;
+    })();
   };
 
-  bindFastActivate(soundButton, handleSoundToggle);
+  soundButton.addEventListener("click", handleSoundToggle);
 
   stage.addEventListener("pointerup", handleFirstPaintGesture, { passive: true });
   document.addEventListener("keydown", (event) => {
@@ -340,27 +324,30 @@
     }
   });
 
-  video.addEventListener("timeupdate", () => {
-    updateTimecode(false);
-  });
-  video.addEventListener("durationchange", () => updateTimecode(true));
-  video.addEventListener("loadedmetadata", () => updateTimecode(true));
+  video.addEventListener("durationchange", updateTimecode);
+  video.addEventListener("loadedmetadata", updateTimecode);
   video.addEventListener("seeked", () => {
-    updateTimecode(true);
+    updateTimecode();
     syncAudioToVideo();
   });
   video.addEventListener("playing", () => {
     markVideoLive();
-    updateTimecode(true);
+    startTimecodeLoop();
     syncAudioToVideo();
   });
+  video.addEventListener("pause", stopTimecodeLoop);
 
   document.addEventListener("visibilitychange", async () => {
     if (document.hidden) {
+      stopTimecodeLoop();
       if (!audio.paused) {
         audio.pause();
       }
       return;
+    }
+
+    if (!video.paused) {
+      startTimecodeLoop();
     }
 
     if (soundEnabled) {

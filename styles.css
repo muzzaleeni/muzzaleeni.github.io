@@ -89,32 +89,9 @@ body.video-live .vignette {
   background-image:
     repeating-radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px),
     repeating-radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 4px);
-  opacity: 0.055;
+  opacity: 0.038;
   mix-blend-mode: soft-light;
-  animation: grain-shift 7s steps(8) infinite;
-  will-change: transform;
   contain: paint;
-}
-
-@keyframes grain-shift {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  20% {
-    transform: translate3d(-3.2%, 2.6%, 0);
-  }
-  40% {
-    transform: translate3d(3.1%, -2.4%, 0);
-  }
-  60% {
-    transform: translate3d(-2.4%, -1.8%, 0);
-  }
-  80% {
-    transform: translate3d(2.6%, 3.4%, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
 }
 
 .intro-title {
@@ -332,11 +309,6 @@ body.video-live .vignette {
     touch-action: manipulation;
   }
 
-  .grain {
-    animation: none;
-    opacity: 0.035;
-  }
-
   .intro-title {
     top: var(--hero-top-mobile);
     width: calc(100% - 1.2rem);
@@ -401,13 +373,6 @@ body.video-live .vignette {
   }
 }
 
-@media (hover: none), (pointer: coarse) {
-  .grain {
-    animation: none;
-    opacity: 0.03;
-  }
-}
-
 @media (max-width: 420px) {
   .intro-title {
     width: calc(100% - 0.7rem);
@@ -447,9 +412,5 @@ body.video-live .vignette {
   .current-note a,
   .links a {
     transition: none;
-  }
-
-  .grain {
-    animation: none;
   }
 }
