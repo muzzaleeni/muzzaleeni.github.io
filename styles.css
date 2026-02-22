@@ -319,6 +319,20 @@ body.video-live .vignette {
   pointer-events: none;
 }
 
+.edition-log {
+  position: absolute;
+  top: calc(1.72rem + env(safe-area-inset-top));
+  left: clamp(0.8rem, 2vw, 1.4rem);
+  z-index: 3;
+  margin: 0;
+  color: rgba(244, 246, 251, 0.6);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.53rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   html,
   body {
@@ -382,6 +396,13 @@ body.video-live .vignette {
     letter-spacing: 0.09em;
   }
 
+  .edition-log {
+    top: calc(1.48rem + env(safe-area-inset-top));
+    left: calc(0.68rem + env(safe-area-inset-left));
+    font-size: 0.48rem;
+    letter-spacing: 0.07em;
+  }
+
   .sound-toggle {
     right: calc(0.68rem + env(safe-area-inset-right));
     bottom: calc(var(--sound-bottom-desktop) + env(safe-area-inset-bottom));
@@ -422,6 +443,12 @@ body.video-live .vignette {
   .edition-stamp {
     font-size: 0.5rem;
     letter-spacing: 0.08em;
+  }
+
+  .edition-log {
+    top: calc(1.38rem + env(safe-area-inset-top));
+    font-size: 0.44rem;
+    letter-spacing: 0.06em;
   }
 
 }
