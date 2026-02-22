@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" id="top">
 
 <head>
   <meta charset="utf-8">
@@ -22,19 +22,18 @@
 <body>
   <main>
     <header class="site-header">
-      <a class="brand" href="index.html">muslim bayemirov</a>
+      <a class="brand" href="#top">muslim bayemirov</a>
       <p class="tagline">data + software + execution</p>
       <nav class="site-nav" aria-label="Primary">
         <ul>
-          <li><a href="index.html" aria-current="page">home</a></li>
-          <li><a href="resume.pdf">tl;dr</a></li>
-          <li><a href="about.html">about</a></li>
-          <li><a href="education.html">education</a></li>
-          <li><a href="experience.html">experience</a></li>
-          <li><a href="projects.html">projects</a></li>
-          <li><a href="awards.html">awards</a></li>
-          <li><a href="skills.html">skills</a></li>
-          <li><a href="contact.html">contact</a></li>
+          <li><a href="#about">about</a></li>
+          <li><a href="#education">education</a></li>
+          <li><a href="#experience">experience</a></li>
+          <li><a href="#projects">projects</a></li>
+          <li><a href="#awards">awards</a></li>
+          <li><a href="#skills">skills</a></li>
+          <li><a href="#contact">contact</a></li>
+          <li><a href="resume.pdf">tl;dr (pdf)</a></li>
         </ul>
       </nav>
     </header>
@@ -43,16 +42,70 @@
     <p class="lede">hey, muslim here. currently crunching numbers as a data analyst intern at bmw group, munich 🇩🇪 🚗💻</p>
     <p class="note">now: focused on useful analytics, cleaner pipelines, and products that ship fast.</p>
 
-    <section class="section">
-      <p class="kicker">quick map</p>
-      <ul class="list inline-links">
-        <li><a href="experience.html">experience</a> for where i worked and what changed.</li>
-        <li><a href="projects.html">projects</a> for things i built and shipped.</li>
-        <li><a href="resume.pdf">tl;dr</a> for the compact version.</li>
+    <section class="section" id="about">
+      <p class="kicker">about</p>
+      <ul class="list">
+        <li>i like practical systems, fast iteration, and products that pull their weight.</li>
+        <li>my default mode is to ship first, then refine with real feedback.</li>
+        <li>i enjoy the intersection of analytics, backend systems, and product thinking.</li>
       </ul>
     </section>
 
-    <p class="footer-note">no frameworks, no heavy assets, just html + css.</p>
+    <section class="section" id="education">
+      <p class="kicker">education</p>
+      <ul class="list">
+        <li>b.sc. in computer science at constructor university, bremen 🇩🇪.</li>
+        <li>worked in c/c++, databases, and web systems.</li>
+        <li>thesis touched unikernels and systems-level experimentation 🔍.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="experience">
+      <p class="kicker">experience</p>
+      <ul class="list">
+        <li><strong>bmw group</strong> | data &amp; software intern, munich 🇩🇪 - helped prepare a project migrating local data to aws, saving around €100k and 6 months 💾🚀</li>
+        <li><strong>qazpost</strong> | backend dev intern, astana 🇰🇿 - built a go api with full-text search and jwt auth, optimized postgres, automated workflows ⚡</li>
+        <li><strong>xmoon.ai</strong> | software intern, remote 🌐 - developed a python telegram bot for crypto onboarding and backtested trading signals 📈🤖</li>
+      </ul>
+    </section>
+
+    <section class="section" id="projects">
+      <p class="kicker">projects</p>
+      <ul class="list">
+        <li><strong>gourmenta</strong> | python, fastapi, sqlite, next.js, tailwindcss 🌐 - scraped around 3gb of restaurant data, automated captcha, built a fast query pipeline, lighthouse 100/98, 100+ users 🍽️</li>
+        <li><strong>dostapp</strong> | python, fastapi, aws, next.js, tailwindcss, typescript 🌐 - social dining platform in kz, shipped payment integration in 48h using fastapi + aws lambda 💸</li>
+      </ul>
+    </section>
+
+    <section class="section" id="awards">
+      <p class="kicker">awards &amp; achievements</p>
+      <ul class="list">
+        <li>selected at the largest incubator in central asia (top-100 / 4k+, 1k+ alumni from 20+ countries) 🚀</li>
+        <li>best hack for social good by blackrock at jacobshack 2022 (30+ teams) 💡</li>
+        <li>national gold medalist in algorithmic programming (top-2 / 200+) 🏅</li>
+        <li>accepted into the largest competitive programming school in cis (top-200 / 2k+) 💻</li>
+      </ul>
+    </section>
+
+    <section class="section" id="skills">
+      <p class="kicker">technical skills</p>
+      <ul class="list">
+        <li><strong>languages</strong>: python, c/c++, go, java, sql, javascript, html/css, typescript, php 🖥️</li>
+        <li><strong>frameworks</strong>: fastapi, postgresql, next.js, mongodb, tailwindcss, spring boot, react ⚡</li>
+        <li><strong>tools</strong>: git, linux, aws, jira, firebase 🛠️</li>
+      </ul>
+    </section>
+
+    <section class="section" id="contact">
+      <p class="kicker">contact</p>
+      <ul class="list inline-links">
+        <li><a href="mailto:muslimbayemirov@gmail.com">email</a></li>
+        <li><a href="https://www.linkedin.com/in/muzzaleeni/">linkedin</a></li>
+        <li><a href="https://t.me/muzzyaqow">telegram</a></li>
+      </ul>
+    </section>
+
+    <p class="footer-note">one html, one css, no framework, no build step.</p>
   </main>
 </body>
 

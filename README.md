@@ -4,8 +4,8 @@ Static personal site built with plain HTML + CSS.
 
 ## Structure
 
-- `index.html` + page files (`about`, `education`, `experience`, `projects`, `awards`, `skills`, `contact`)
-- `styles.css` shared styling system
+- `index.html` single-page content
+- `styles.css` shared styling
 - `resume.pdf` quick downloadable CV
 
 ## Design direction

@@ -12,6 +12,7 @@
 
 html {
   font-size: 17px;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -72,11 +73,6 @@ main {
   color: var(--accent);
 }
 
-.site-nav a[aria-current="page"] {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
 h1 {
   font-size: clamp(1.8rem, 4vw, 2.4rem);
   line-height: 1.15;
@@ -95,6 +91,7 @@ p {
 
 .section {
   margin-top: 2rem;
+  scroll-margin-top: 1rem;
 }
 
 .kicker {
