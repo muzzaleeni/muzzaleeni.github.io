@@ -39,6 +39,14 @@ Optional fallbacks:
 - Mobile video: H.264 MP4, 720p, ~1.5-3 Mbps, 15-30s
 - Audio: AAC M4A, 128-192 kbps
 
+## Media credits
+
+Credits are documented here (not rendered in the client UI).
+
+- Video by Engin Akyurt from Pexels: https://www.pexels.com/video/dramatic-sea-waves-28371210/
+- Music by Alejandro Magaña (A. M.) from Mixkit
+- Track title: `Hazy After Hours`
+
 ## Favicon
 
 Current files:
