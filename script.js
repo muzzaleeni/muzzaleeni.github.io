@@ -2,6 +2,7 @@
   const SOUND_KEY = "runway_sound";
   const UNLOCK_KEY = "runway_sound_unlocked";
   const SYNC_INTERVAL_MS = 1000;
+  const INTRO_DELAY_MS = 1000;
 
   const video = document.getElementById("runway-video");
   const audio = document.getElementById("runway-audio");
@@ -100,14 +101,21 @@
     }
   };
 
+  const markVideoLive = () => {
+    document.body.classList.add("video-live");
+  };
+
   const attemptVideoAutoplay = async () => {
     try {
       await video.play();
+      markVideoLive();
       playButton.classList.add("hidden");
       setStatus("");
+      return true;
     } catch (error) {
       playButton.classList.remove("hidden");
       setStatus("Tap to start the runway film.");
+      return false;
     }
   };
 
@@ -168,15 +176,18 @@
   });
 
   playButton.addEventListener("click", async () => {
-    await attemptVideoAutoplay();
-    if (soundEnabled) {
+    const started = await attemptVideoAutoplay();
+    if (started && soundEnabled) {
       await startAudio();
       setSoundButtonState();
     }
   });
 
   video.addEventListener("seeked", syncAudioToVideo);
-  video.addEventListener("playing", syncAudioToVideo);
+  video.addEventListener("playing", () => {
+    markVideoLive();
+    syncAudioToVideo();
+  });
   video.addEventListener("ended", syncAudioToVideo);
 
   document.addEventListener("visibilitychange", async () => {
@@ -204,6 +215,9 @@
   });
 
   setSoundButtonState();
-  attemptVideoAutoplay();
-  applySoundPreference();
+
+  setTimeout(async () => {
+    await attemptVideoAutoplay();
+    await applySoundPreference();
+  }, INTRO_DELAY_MS);
 })();
