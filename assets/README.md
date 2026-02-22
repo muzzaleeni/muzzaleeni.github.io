@@ -1,6 +1,6 @@
 # Media Assets
 
-Place the background scene media files here.
+Place the background scene media files and icon files here.
 
 Required:
 - scene-desktop.mp4
@@ -12,3 +12,9 @@ Optional:
 - scene-desktop.webm
 - scene-mobile.webm
 - scene-audio.mp3
+
+Icon files:
+- favicon.svg
+- favicon.ico
+- favicon-32.png
+- apple-touch-icon.png

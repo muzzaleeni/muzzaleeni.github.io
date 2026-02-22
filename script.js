@@ -1,8 +1,6 @@
 (() => {
   const SOUND_KEY = "site_sound";
   const UNLOCK_KEY = "site_sound_unlocked";
-  const LEGACY_SOUND_KEY = "runway_sound";
-  const LEGACY_UNLOCK_KEY = "runway_sound_unlocked";
   const SYNC_INTERVAL_MS = 2000;
   const INTRO_DELAY_MS = 1000;
   const INPUT_DEDUP_MS = 450;
@@ -74,18 +72,8 @@
     audio.src = audio.dataset.fallbackSrc;
   }
 
-  const storedSoundPref = readStorage(SOUND_KEY) ?? readStorage(LEGACY_SOUND_KEY);
-  const storedUnlockPref = readStorage(UNLOCK_KEY) ?? readStorage(LEGACY_UNLOCK_KEY);
-
-  if (storedSoundPref !== null && readStorage(SOUND_KEY) === null) {
-    writeStorage(SOUND_KEY, storedSoundPref);
-  }
-  if (storedUnlockPref !== null && readStorage(UNLOCK_KEY) === null) {
-    writeStorage(UNLOCK_KEY, storedUnlockPref);
-  }
-
-  let soundEnabled = storedSoundPref === "on";
-  let userUnlockedAudio = storedUnlockPref === "1";
+  let soundEnabled = readStorage(SOUND_KEY) === "on";
+  let userUnlockedAudio = readStorage(UNLOCK_KEY) === "1";
   let syncHandle;
   let videoSyncEnabled = true;
   let needsGestureForPlayback = false;
