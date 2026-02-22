@@ -12,6 +12,7 @@
   const statusEl = document.getElementById("media-status");
   const timecodeEl = document.getElementById("timecode");
   const copyrightYearEl = document.getElementById("copyright-year");
+  const phaseGlyphEl = document.getElementById("phase-glyph");
 
   if (!stage || !video || !audio || !soundButton || !statusEl || !timecodeEl) {
     return;
@@ -20,6 +21,34 @@
   if (copyrightYearEl) {
     copyrightYearEl.textContent = String(new Date().getFullYear());
   }
+
+  const setPhaseGlyph = () => {
+    if (!phaseGlyphEl) {
+      return;
+    }
+
+    // Approximate lunar phase based on synodic month length.
+    const phases = ["○", "◔", "◑", "◕", "●", "◕", "◑", "◔"];
+    const phaseNames = [
+      "new",
+      "waxing crescent",
+      "first quarter",
+      "waxing gibbous",
+      "full",
+      "waning gibbous",
+      "last quarter",
+      "waning crescent",
+    ];
+    const synodicMonthDays = 29.530588853;
+    const knownNewMoonUtc = Date.UTC(2024, 0, 11, 11, 57, 0);
+    const daysSinceNewMoon = (Date.now() - knownNewMoonUtc) / 86400000;
+    const phaseAge = ((daysSinceNewMoon % synodicMonthDays) + synodicMonthDays) % synodicMonthDays;
+    const phaseIndex = Math.floor((phaseAge / synodicMonthDays) * phases.length) % phases.length;
+
+    phaseGlyphEl.textContent = phases[phaseIndex];
+    phaseGlyphEl.setAttribute("aria-label", `phase: ${phaseNames[phaseIndex]}`);
+    phaseGlyphEl.title = `phase: ${phaseNames[phaseIndex]}`;
+  };
 
   const setStatus = (message) => {
     statusEl.textContent = message || "";
@@ -314,6 +343,7 @@
 
   setSoundButtonState();
   updateTimecode();
+  setPhaseGlyph();
 
   setTimeout(async () => {
     await attemptVideoAutoplay();
