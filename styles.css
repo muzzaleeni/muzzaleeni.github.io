@@ -6,6 +6,7 @@
   --surface: rgba(16, 20, 24, 0.76);
   --surface-strong: rgba(12, 15, 19, 0.9);
   --scene-accent: #7dd4ff;
+  --scene-rgb: 125, 212, 255;
 }
 
 * {
@@ -22,7 +23,7 @@ body {
   min-height: 100vh;
   background: radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.06), transparent 35%), radial-gradient(circle at 80% 5%, rgba(125, 212, 255, 0.16), transparent 35%), var(--bg);
   color: var(--ink);
-  font-family: "Space Mono", Menlo, Consolas, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   line-height: 1.65;
   overflow-x: hidden;
   transition: background-color 420ms ease;
@@ -43,7 +44,7 @@ body::after {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--scene-accent) 28%, transparent) 0%, transparent 52%);
+  background: radial-gradient(circle at 50% 0%, rgba(var(--scene-rgb), 0.28) 0%, transparent 52%);
   transition: background 420ms ease;
 }
 
@@ -54,6 +55,11 @@ body::after {
   height: 100%;
   z-index: -3;
   pointer-events: none;
+  display: none;
+}
+
+.enhanced #light-canvas {
+  display: block;
 }
 
 .runway-spine {
@@ -67,8 +73,12 @@ body::after {
   background: linear-gradient(180deg, rgba(245, 248, 252, 0.12), rgba(245, 248, 252, 0.02) 15%, rgba(245, 248, 252, 0.14) 50%, rgba(245, 248, 252, 0.03) 85%, rgba(245, 248, 252, 0.11));
   border-left: 1px solid rgba(255, 255, 255, 0.17);
   border-right: 1px solid rgba(255, 255, 255, 0.17);
-  box-shadow: 0 0 60px color-mix(in srgb, var(--scene-accent) 22%, transparent);
+  box-shadow: none;
   transition: box-shadow 380ms ease;
+}
+
+.enhanced .runway-spine {
+  box-shadow: 0 0 40px rgba(var(--scene-rgb), 0.28);
 }
 
 .show {
@@ -89,7 +99,7 @@ body::after {
   border: 1px solid var(--line);
   border-radius: 1rem;
   padding: 0.78rem 0.9rem;
-  backdrop-filter: blur(12px);
+  backdrop-filter: none;
 }
 
 .sheet-id {
@@ -110,7 +120,7 @@ body::after {
 
 .brand {
   color: var(--ink);
-  font-family: "Archivo Black", Impact, sans-serif;
+  font-family: "Arial Black", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: clamp(1.1rem, 3vw, 1.65rem);
   letter-spacing: 0.03em;
   text-decoration: none;
@@ -140,20 +150,20 @@ body::after {
   letter-spacing: 0.08em;
   padding: 0.34rem 0.6rem;
   text-decoration: none;
-  text-transform: uppercase;
+  text-transform: none;
   transition: 170ms ease;
 }
 
 .quick-nav a:hover,
 .quick-nav a:focus-visible,
 .quick-nav a.active {
-  border-color: color-mix(in srgb, var(--scene-accent) 70%, white);
+  border-color: rgba(var(--scene-rgb), 0.84);
   color: var(--ink);
 }
 
 .nav-pill {
   color: #0f1419 !important;
-  background: color-mix(in srgb, var(--scene-accent) 80%, white 20%);
+  background: rgba(var(--scene-rgb), 0.9);
   font-weight: 700;
 }
 
@@ -175,6 +185,9 @@ body::after {
   pointer-events: none;
   background: linear-gradient(92deg, transparent 0%, rgba(255, 255, 255, 0.06) 46%, transparent 53%);
   transform: translateX(-100%);
+}
+
+.enhanced .hero::after {
   animation: light-sweep 5.6s linear infinite;
 }
 
@@ -183,16 +196,16 @@ body::after {
   color: var(--scene-accent);
   font-size: 0.71rem;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .hero h1 {
   margin: 0.95rem 0;
-  font-family: "Archivo Black", Impact, sans-serif;
+  font-family: "Arial Black", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: clamp(2.2rem, 10vw, 6.8rem);
   line-height: 0.9;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .hero h1 span {
@@ -201,12 +214,12 @@ body::after {
 
 .hero h1 .accent {
   color: var(--scene-accent);
-  text-shadow: 0 0 22px color-mix(in srgb, var(--scene-accent) 45%, transparent);
+  text-shadow: 0 0 22px rgba(var(--scene-rgb), 0.45);
 }
 
 .hero-copy {
   margin: 0;
-  font-family: "Chivo", "Helvetica Neue", sans-serif;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: clamp(1rem, 2vw, 1.2rem);
   max-width: 48ch;
 }
@@ -238,11 +251,11 @@ body::after {
 }
 
 .btn {
-  border: 1px solid color-mix(in srgb, var(--scene-accent) 65%, white);
+  border: 1px solid rgba(var(--scene-rgb), 0.86);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--scene-accent) 78%, white 22%);
+  background: rgba(var(--scene-rgb), 0.92);
   color: #0c1116;
-  font-family: "Archivo Black", sans-serif;
+  font-family: "Arial Black", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 0.04em;
   padding: 0.55rem 0.92rem;
   text-decoration: none;
@@ -253,7 +266,7 @@ body::after {
 .btn:hover,
 .btn:focus-visible {
   transform: translateY(-2px);
-  box-shadow: 0 0 24px color-mix(in srgb, var(--scene-accent) 45%, transparent);
+  box-shadow: 0 0 24px rgba(var(--scene-rgb), 0.4);
 }
 
 .btn.ghost {
@@ -269,12 +282,14 @@ body::after {
   padding: 1rem;
   position: relative;
   scroll-margin-top: 4.8rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 720px;
 }
 
 .look h2,
 .finale h2 {
   margin: 0.55rem 0 0.9rem;
-  font-family: "Chivo", "Helvetica Neue", sans-serif;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: clamp(1.2rem, 3.1vw, 2rem);
   line-height: 1.15;
   max-width: 27ch;
@@ -310,12 +325,12 @@ body::after {
 }
 
 .set-card:hover {
-  border-color: color-mix(in srgb, var(--scene-accent) 72%, white);
+  border-color: rgba(var(--scene-rgb), 0.82);
 }
 
 .card-title {
   margin: 0;
-  font-family: "Archivo Black", sans-serif;
+  font-family: "Arial Black", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: 1rem;
   text-transform: lowercase;
 }
@@ -340,7 +355,7 @@ body::after {
   margin-top: 0.88rem;
   display: inline-block;
   color: var(--ink);
-  border-bottom: 1px solid color-mix(in srgb, var(--scene-accent) 70%, transparent);
+  border-bottom: 1px solid rgba(var(--scene-rgb), 0.7);
   text-decoration: none;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -361,7 +376,7 @@ body::after {
 }
 
 .critics-list li {
-  border-left: 3px solid color-mix(in srgb, var(--scene-accent) 78%, white);
+  border-left: 3px solid rgba(var(--scene-rgb), 0.85);
   padding-left: 0.72rem;
 }
 
@@ -369,7 +384,7 @@ body::after {
   grid-column: 1 / -1;
   margin-top: 1rem;
   text-align: center;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--scene-accent) 12%, rgba(10, 12, 15, 0.96)), rgba(10, 12, 15, 0.95));
+  background: linear-gradient(160deg, rgba(var(--scene-rgb), 0.13), rgba(10, 12, 15, 0.95));
 }
 
 .lineup {
@@ -386,7 +401,7 @@ body::after {
   text-transform: uppercase;
   letter-spacing: 0.07em;
   padding: 0.78rem;
-  font-family: "Archivo Black", sans-serif;
+  font-family: "Arial Black", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: 0.86rem;
   transition: transform 170ms ease, border-color 170ms ease;
 }
@@ -394,7 +409,7 @@ body::after {
 .lineup-link:hover,
 .lineup-link:focus-visible {
   transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--scene-accent) 74%, white);
+  border-color: rgba(var(--scene-rgb), 0.85);
   color: var(--scene-accent);
 }
 
@@ -415,6 +430,13 @@ body::after {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.js .call-sheet.reveal,
+.js .hero.reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .js .reveal.is-visible {

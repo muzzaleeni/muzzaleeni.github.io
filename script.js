@@ -2,6 +2,21 @@
   document.documentElement.classList.add("js");
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const saveData = Boolean(connection && connection.saveData);
+  const shouldEnhance = !reduceMotion && !saveData;
+
+  const hexToRgb = (hex) => {
+    const raw = (hex || "").replace("#", "").trim();
+    if (raw.length !== 6) {
+      return { r: 125, g: 212, b: 255 };
+    }
+    return {
+      r: Number.parseInt(raw.slice(0, 2), 16),
+      g: Number.parseInt(raw.slice(2, 4), 16),
+      b: Number.parseInt(raw.slice(4, 6), 16)
+    };
+  };
 
   const tickerPhrases = [
     "shipping production-grade backend work at bmw group.",
@@ -11,7 +26,7 @@
   ];
 
   const ticker = document.getElementById("ticker");
-  if (ticker && !reduceMotion) {
+  if (ticker && shouldEnhance) {
     let phraseIndex = 0;
     let charIndex = 0;
     let deleting = false;
@@ -50,8 +65,11 @@
   const updateScene = (section) => {
     const scene = section.dataset.scene || "hero";
     const light = section.dataset.light || "#7dd4ff";
+    const rgb = hexToRgb(light);
     activeColor = light;
+
     document.documentElement.style.setProperty("--scene-accent", light);
+    document.documentElement.style.setProperty("--scene-rgb", `${rgb.r}, ${rgb.g}, ${rgb.b}`);
     document.body.dataset.scene = scene;
 
     navLinks.forEach((link) => {
@@ -59,6 +77,13 @@
       link.classList.toggle("active", href === `#${section.id}`);
     });
   };
+
+  const initiallyVisible = document.querySelectorAll(".call-sheet.reveal, .hero.reveal");
+  initiallyVisible.forEach((el) => el.classList.add("is-visible"));
+
+  if (sceneSections.length > 0) {
+    updateScene(sceneSections[0]);
+  }
 
   if ("IntersectionObserver" in window) {
     const revealObserver = new IntersectionObserver(
@@ -90,7 +115,7 @@
     revealTargets.forEach((target) => target.classList.add("is-visible"));
   }
 
-  if (!reduceMotion) {
+  const initPointerInteractions = () => {
     const magneticTargets = document.querySelectorAll(".magnetic");
     magneticTargets.forEach((el) => {
       el.addEventListener("mousemove", (event) => {
@@ -120,120 +145,134 @@
         card.style.transform = "perspective(760px) rotateX(0deg) rotateY(0deg)";
       });
     });
-  }
+  };
 
-  const canvas = document.getElementById("light-canvas");
-  if (!canvas || reduceMotion) {
-    return;
-  }
-
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    return;
-  }
-
-  let width = 0;
-  let height = 0;
-  let animationId;
-  const beams = [
-    { phase: 0.4, speed: 0.0024, width: 90 },
-    { phase: 2.1, speed: 0.0018, width: 70 },
-    { phase: 4.8, speed: 0.0021, width: 120 }
-  ];
-
-  const particles = [];
-  const particleCount = Math.min(90, Math.floor(window.innerWidth / 16));
-
-  const hexToRgb = (hex) => {
-    const raw = hex.replace("#", "").trim();
-    if (raw.length !== 6) {
-      return { r: 125, g: 212, b: 255 };
+  const initLightingCanvas = () => {
+    const canvas = document.getElementById("light-canvas");
+    if (!canvas) {
+      return;
     }
-    return {
-      r: Number.parseInt(raw.slice(0, 2), 16),
-      g: Number.parseInt(raw.slice(2, 4), 16),
-      b: Number.parseInt(raw.slice(4, 6), 16)
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      return;
+    }
+
+    let width = 0;
+    let height = 0;
+    let animationId;
+    const beams = [
+      { phase: 0.4, speed: 0.0022, width: 90 },
+      { phase: 2.1, speed: 0.0017, width: 70 }
+    ];
+
+    const particles = [];
+    const particleCount = Math.min(48, Math.floor(window.innerWidth / 26));
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
-  };
 
-  const resize = () => {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  };
+    const resetParticles = () => {
+      particles.length = 0;
+      for (let i = 0; i < particleCount; i += 1) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: Math.random() * 0.34 + 0.05,
+          r: Math.random() * 1.2 + 0.2
+        });
+      }
+    };
 
-  const resetParticles = () => {
-    particles.length = 0;
-    for (let i = 0; i < particleCount; i += 1) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.22,
-        vy: Math.random() * 0.45 + 0.05,
-        r: Math.random() * 1.5 + 0.2
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+      const rgb = hexToRgb(activeColor);
+
+      beams.forEach((beam, index) => {
+        beam.phase += beam.speed;
+        const lane = Math.sin(beam.phase + index) * 0.5 + 0.5;
+        const x = lane * width;
+        const grad = ctx.createLinearGradient(x - beam.width, 0, x + beam.width, 0);
+        grad.addColorStop(0, "rgba(0, 0, 0, 0)");
+        grad.addColorStop(0.5, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.08)`);
+        grad.addColorStop(0.52, "rgba(255, 255, 255, 0.1)");
+        grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(x - beam.width, 0, beam.width * 2, height);
       });
-    }
-  };
 
-  const draw = () => {
-    ctx.clearRect(0, 0, width, height);
+      particles.forEach((particle) => {
+        particle.y += particle.vy;
+        particle.x += particle.vx;
 
-    const rgb = hexToRgb(activeColor);
+        if (particle.y > height + 8) {
+          particle.y = -8;
+          particle.x = Math.random() * width;
+        }
 
-    beams.forEach((beam, index) => {
-      beam.phase += beam.speed;
-      const lane = Math.sin(beam.phase + index) * 0.5 + 0.5;
-      const x = lane * width;
-      const grad = ctx.createLinearGradient(x - beam.width, 0, x + beam.width, 0);
-      grad.addColorStop(0, "rgba(0, 0, 0, 0)");
-      grad.addColorStop(0.5, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.09)`);
-      grad.addColorStop(0.52, "rgba(255, 255, 255, 0.11)");
-      grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(x - beam.width, 0, beam.width * 2, height);
+        if (particle.x < -4 || particle.x > width + 4) {
+          particle.vx *= -1;
+        }
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.22)`;
+        ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      animationId = requestAnimationFrame(draw);
+    };
+
+    window.addEventListener("resize", () => {
+      resize();
+      resetParticles();
     });
 
-    particles.forEach((particle) => {
-      particle.y += particle.vy;
-      particle.x += particle.vx;
-
-      if (particle.y > height + 8) {
-        particle.y = -8;
-        particle.x = Math.random() * width;
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationId);
+      } else {
+        draw();
       }
-
-      if (particle.x < -4 || particle.x > width + 4) {
-        particle.vx *= -1;
-      }
-
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.28)`;
-      ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
-      ctx.fill();
     });
 
-    animationId = requestAnimationFrame(draw);
-  };
-
-  window.addEventListener("resize", () => {
     resize();
     resetParticles();
-  });
+    draw();
+  };
 
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      cancelAnimationFrame(animationId);
-    } else {
-      draw();
+  const startEnhancements = () => {
+    if (!shouldEnhance || document.body.classList.contains("enhanced")) {
+      return;
     }
-  });
 
-  resize();
-  resetParticles();
-  draw();
+    document.body.classList.add("enhanced");
+    initPointerInteractions();
+    initLightingCanvas();
+  };
+
+  if (shouldEnhance) {
+    const scheduleEnhancements = () => {
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(startEnhancements, { timeout: 1500 });
+      } else {
+        setTimeout(startEnhancements, 900);
+      }
+    };
+
+    if (document.readyState === "complete") {
+      scheduleEnhancements();
+    } else {
+      window.addEventListener("load", scheduleEnhancements, { once: true });
+    }
+  }
 })();
