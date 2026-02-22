@@ -230,6 +230,12 @@ body.video-live .vignette {
   border-color: var(--line-soft);
 }
 
+.key-hint {
+  color: rgba(244, 246, 251, 0.62);
+  font-size: 0.88em;
+  letter-spacing: 0.06em;
+}
+
 .timecode {
   position: absolute;
   left: clamp(0.85rem, 2.2vw, 1.7rem);
