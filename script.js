@@ -28,7 +28,7 @@
     }
 
     // Approximate lunar phase based on synodic month length.
-    const phases = ["○", "◔", "◑", "◕", "●", "◕", "◑", "◔"];
+    const phases = ["◯", "◔", "◑", "◕", "●", "◕", "◑", "◔"];
     const phaseNames = [
       "new",
       "waxing crescent",
