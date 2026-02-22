@@ -13,6 +13,7 @@
   const timecodeEl = document.getElementById("timecode");
   const copyrightYearEl = document.getElementById("copyright-year");
   const editionStampEl = document.getElementById("edition-stamp");
+  const ambientClockEl = document.getElementById("ambient-clock");
 
   if (!stage || !video || !audio || !soundButton || !statusEl || !timecodeEl) {
     return;
@@ -45,6 +46,33 @@
     editionStampEl.textContent = stamp;
     editionStampEl.setAttribute("aria-label", `edition ${stamp}`);
     editionStampEl.title = `edition ${stamp}`;
+  };
+
+  const setAmbientClock = () => {
+    if (!ambientClockEl) {
+      return;
+    }
+
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const label = `local ${hh}:${mm}`;
+    ambientClockEl.textContent = label;
+    ambientClockEl.setAttribute("aria-label", `local time ${hh}:${mm}`);
+    ambientClockEl.title = label;
+  };
+
+  const startAmbientClock = () => {
+    if (!ambientClockEl) {
+      return;
+    }
+
+    setAmbientClock();
+    const delayToNextMinute = 60000 - (Date.now() % 60000);
+    setTimeout(() => {
+      setAmbientClock();
+      setInterval(setAmbientClock, 60000);
+    }, delayToNextMinute);
   };
 
   const setStatus = (message) => {
@@ -341,6 +369,7 @@
   setSoundButtonState();
   updateTimecode();
   setEditionStamp();
+  startAmbientClock();
 
   setTimeout(async () => {
     await attemptVideoAutoplay();
