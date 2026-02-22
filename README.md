@@ -1,36 +1,36 @@
 # Personal website
 
-Film-first runway single-page website built with plain HTML, CSS, and vanilla JS.
+Minimal ambient-film single-page website built with plain HTML, CSS, and vanilla JS.
 
 ## Structure
 
-- `index.html`: full-viewport film stage + minimal overlay
-- `styles.css`: cinematic styling, vignette, fixed overlay controls
+- `index.html`: full-viewport background video and minimal overlay
+- `styles.css`: cinematic styling, vignette/grain, fixed overlay controls
 - `script.js`: media controller (autoplay, sound preference, sync, fallback states)
-- `assets/`: runway media files (video/audio/poster)
+- `assets/`: media files (video/audio/poster)
 - `resume.pdf`: downloadable CV
 
 ## Required media files
 
 Add these files exactly:
 
-- `assets/runway-desktop.mp4`
-- `assets/runway-mobile.mp4`
-- `assets/runway-audio.m4a`
-- `assets/runway-poster.jpg`
+- `assets/scene-desktop.mp4`
+- `assets/scene-mobile.mp4`
+- `assets/scene-audio.m4a`
+- `assets/scene-poster.jpg`
 
 Optional fallbacks:
 
-- `assets/runway-desktop.webm`
-- `assets/runway-mobile.webm`
-- `assets/runway-audio.mp3`
+- `assets/scene-desktop.webm`
+- `assets/scene-mobile.webm`
+- `assets/scene-audio.mp3`
 
 ## Behavior and constraints
 
 - Video attempts muted autoplay and loops.
-- Music does **not** autoplay with sound by default due browser policy.
-- User enables sound via one explicit click/tap (`Sound On`).
-- Sound preference is stored in `localStorage` as `runway_sound` and unlock state as `runway_sound_unlocked`.
+- Sound does **not** autoplay by default due browser policy.
+- User enables sound with one explicit click/tap.
+- Sound preference is stored in `localStorage` as `site_sound` and unlock state as `site_sound_unlocked`.
 - Overlay links remain available at all times.
 
 ## Suggested encoding targets

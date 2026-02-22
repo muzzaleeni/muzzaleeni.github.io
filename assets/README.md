@@ -1,14 +1,14 @@
-# Runway Media Assets
+# Media Assets
 
-Place your runway film files here.
+Place the background scene media files here.
 
 Required:
-- runway-desktop.mp4
-- runway-mobile.mp4
-- runway-audio.m4a
-- runway-poster.jpg
+- scene-desktop.mp4
+- scene-mobile.mp4
+- scene-audio.m4a
+- scene-poster.jpg
 
 Optional:
-- runway-desktop.webm
-- runway-mobile.webm
-- runway-audio.mp3
+- scene-desktop.webm
+- scene-mobile.webm
+- scene-audio.mp3

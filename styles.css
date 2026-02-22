@@ -48,7 +48,7 @@ body {
   overflow: hidden;
 }
 
-.runway-video {
+.scene-video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -62,7 +62,7 @@ body {
   transform: translateZ(0);
 }
 
-body.video-live .runway-video {
+body.video-live .scene-video {
   opacity: 1;
 }
 
@@ -319,7 +319,7 @@ body.video-live .vignette {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .runway-video,
+  .scene-video,
   .vignette,
   .sound-toggle,
   .links a {

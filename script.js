@@ -1,13 +1,15 @@
 (() => {
-  const SOUND_KEY = "runway_sound";
-  const UNLOCK_KEY = "runway_sound_unlocked";
+  const SOUND_KEY = "site_sound";
+  const UNLOCK_KEY = "site_sound_unlocked";
+  const LEGACY_SOUND_KEY = "runway_sound";
+  const LEGACY_UNLOCK_KEY = "runway_sound_unlocked";
   const SYNC_INTERVAL_MS = 2000;
   const INTRO_DELAY_MS = 1000;
   const INPUT_DEDUP_MS = 450;
 
   const stage = document.querySelector(".film-stage");
-  const video = document.getElementById("runway-video");
-  const audio = document.getElementById("runway-audio");
+  const video = document.getElementById("scene-video");
+  const audio = document.getElementById("scene-audio");
   const soundButton = document.getElementById("sound-toggle");
   const statusEl = document.getElementById("media-status");
   const timecodeEl = document.getElementById("timecode");
@@ -72,8 +74,18 @@
     audio.src = audio.dataset.fallbackSrc;
   }
 
-  let soundEnabled = readStorage(SOUND_KEY) === "on";
-  let userUnlockedAudio = readStorage(UNLOCK_KEY) === "1";
+  const storedSoundPref = readStorage(SOUND_KEY) ?? readStorage(LEGACY_SOUND_KEY);
+  const storedUnlockPref = readStorage(UNLOCK_KEY) ?? readStorage(LEGACY_UNLOCK_KEY);
+
+  if (storedSoundPref !== null && readStorage(SOUND_KEY) === null) {
+    writeStorage(SOUND_KEY, storedSoundPref);
+  }
+  if (storedUnlockPref !== null && readStorage(UNLOCK_KEY) === null) {
+    writeStorage(UNLOCK_KEY, storedUnlockPref);
+  }
+
+  let soundEnabled = storedSoundPref === "on";
+  let userUnlockedAudio = storedUnlockPref === "1";
   let syncHandle;
   let videoSyncEnabled = true;
   let needsGestureForPlayback = false;
@@ -298,12 +310,12 @@
 
   video.addEventListener("error", () => {
     videoSyncEnabled = false;
-    setStatus("Runway video file is missing. Add files to /assets.");
+    setStatus("Background video file is missing. Add files to /assets.");
   });
 
   audio.addEventListener("error", () => {
     if (soundEnabled) {
-      setStatus("Runway audio file is missing. Add files to /assets.");
+      setStatus("Background audio file is missing. Add files to /assets.");
     }
   });
 
