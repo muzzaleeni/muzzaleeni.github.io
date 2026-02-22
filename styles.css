@@ -364,16 +364,14 @@ body.video-live .vignette {
   }
 
   .sound-toggle {
-    right: 50%;
-    transform: translateX(50%);
-    bottom: calc(0.8rem + env(safe-area-inset-bottom));
+    right: calc(0.68rem + env(safe-area-inset-right));
+    bottom: calc(var(--sound-bottom-desktop) + env(safe-area-inset-bottom));
   }
 
   .timecode {
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: calc(3.75rem + env(safe-area-inset-bottom));
-    font-size: 0.68rem;
+    left: calc(0.68rem + env(safe-area-inset-left));
+    bottom: calc(var(--timecode-bottom-desktop) + env(safe-area-inset-bottom));
+    font-size: 0.7rem;
   }
 }
 
