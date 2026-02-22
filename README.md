@@ -1,15 +1,16 @@
 # Personal website
 
-Static personal site built with plain HTML + CSS.
+Creative single-page website built with plain HTML, CSS, and vanilla JS.
 
 ## Structure
 
-- `index.html` single-page content
-- `styles.css` shared styling
-- `resume.pdf` quick downloadable CV
+- `index.html` single-page content and semantic sections
+- `styles.css` visual design system and responsive layout
+- `script.js` animation + interaction layer (canvas background, reveals, nav state)
+- `resume.pdf` downloadable CV
 
 ## Design direction
 
-- Minimal by default, with light editorial styling
+- Living Manifesto: bold typography, scene-based storytelling, kinetic visuals
 - Zero frameworks, zero build step
-- Fast loading and easy to edit by hand
+- Hand-editable and deployment-simple
