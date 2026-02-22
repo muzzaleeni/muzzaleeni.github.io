@@ -13,7 +13,6 @@
   const timecodeEl = document.getElementById("timecode");
   const copyrightYearEl = document.getElementById("copyright-year");
   const editionStampEl = document.getElementById("edition-stamp");
-  const editionLogEl = document.getElementById("edition-log");
 
   if (!stage || !video || !audio || !soundButton || !statusEl || !timecodeEl) {
     return;
@@ -25,7 +24,7 @@
 
   const setEditionStamp = () => {
     if (!editionStampEl) {
-      return "S00.W00";
+      return;
     }
 
     const now = new Date();
@@ -45,20 +44,6 @@
 
     editionStampEl.textContent = stamp;
     editionStampEl.setAttribute("aria-label", `edition ${stamp}`);
-    return stamp;
-  };
-
-  const setEditionLog = (stamp) => {
-    if (!editionLogEl) {
-      return;
-    }
-
-    const modified = new Date(document.lastModified);
-    const sourceDate = Number.isNaN(modified.getTime()) ? new Date() : modified;
-    const year = sourceDate.getFullYear();
-    const month = String(sourceDate.getMonth() + 1).padStart(2, "0");
-    const day = String(sourceDate.getDate()).padStart(2, "0");
-    editionLogEl.textContent = `${stamp} / LAST CUT ${year}-${month}-${day} / QWAZI FOCUS`;
   };
 
   const setStatus = (message) => {
@@ -377,8 +362,7 @@
 
   setSoundButtonState();
   updateTimecode();
-  const editionStamp = setEditionStamp();
-  setEditionLog(editionStamp);
+  setEditionStamp();
 
   setTimeout(async () => {
     await attemptVideoAutoplay();
