@@ -293,6 +293,27 @@
 
   stage.addEventListener("pointerup", handleFirstPaintGesture, { passive: true });
   document.addEventListener("keydown", (event) => {
+    const target = event.target;
+    const isTypingTarget =
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement ||
+      (target instanceof HTMLElement && target.isContentEditable);
+
+    if (isTypingTarget) {
+      return;
+    }
+
+    if (
+      event.key.toLowerCase() === "r" &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !event.altKey
+    ) {
+      window.open("resume.pdf", "_blank", "noopener,noreferrer");
+      return;
+    }
+
     if (event.key === "Enter" || event.key === " ") {
       handleFirstPaintGesture();
     }
