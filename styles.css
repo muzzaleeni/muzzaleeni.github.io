@@ -5,6 +5,15 @@
   --line: rgba(244, 246, 251, 0.35);
 }
 
+@font-face {
+  font-family: "Cakra";
+  src: url("assets/fonts/Cakra-Normal.woff2") format("woff2"),
+       url("assets/fonts/Cakra-Normal.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -19,7 +28,7 @@ body {
   overflow: hidden;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Archivo", "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
 }
 
 .film-stage {
@@ -74,9 +83,11 @@ body.video-live .vignette {
 .intro-title h1 {
   margin: 0;
   font-size: clamp(1.6rem, 6vw, 4.3rem);
-  letter-spacing: 0.06em;
-  font-weight: 700;
+  letter-spacing: 0.05em;
+  font-family: "Cakra", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
   color: #ffffff;
+  text-transform: uppercase;
 }
 
 .intro-title p {
@@ -114,6 +125,7 @@ body.video-live .vignette {
   color: var(--ink);
   font-size: 0.73rem;
   letter-spacing: 0.08em;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
   text-transform: lowercase;
   padding: 0.38rem 0.62rem;
   border: 1px solid var(--line);
@@ -142,6 +154,7 @@ body.video-live .vignette {
   padding: 0.4rem 0.7rem;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
   text-transform: uppercase;
   color: var(--ink);
   background: rgba(0, 0, 0, 0.45);
