@@ -43,8 +43,8 @@
     const stamp = `S${season}.W${week}`;
 
     editionStampEl.textContent = stamp;
-    editionStampEl.setAttribute("aria-label", `edition ${stamp}`);
-    editionStampEl.title = `edition ${stamp}`;
+    editionStampEl.setAttribute("aria-label", `edition season ${season}, week ${week}`);
+    editionStampEl.title = `Season ${season} · Week ${week}`;
   };
 
   const setStatus = (message) => {
