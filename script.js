@@ -11,9 +11,14 @@
   const soundButton = document.getElementById("sound-toggle");
   const statusEl = document.getElementById("media-status");
   const timecodeEl = document.getElementById("timecode");
+  const copyrightYearEl = document.getElementById("copyright-year");
 
   if (!stage || !video || !audio || !soundButton || !statusEl || !timecodeEl) {
     return;
+  }
+
+  if (copyrightYearEl) {
+    copyrightYearEl.textContent = String(new Date().getFullYear());
   }
 
   const setStatus = (message) => {
