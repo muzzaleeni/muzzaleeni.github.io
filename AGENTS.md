@@ -85,3 +85,23 @@ Static personal website with a cinematic background video, minimal overlay UI, a
 - Asset details: `assets/README.md`
 - Font licensing note: `assets/fonts/README.md`
 - Evolution notes: `docs/agents-evolution.md`
+- Thread state: `docs/thread-state.md`
+
+## Bootstrap + Thread State
+- Before substantive work, ensure these files exist:
+  - `AGENTS.md`
+  - `docs/agents-evolution.md`
+  - `docs/thread-state.md`
+- If `docs/thread-state.md` is missing, create it with:
+  - `Last updated: YYYY-MM-DD`
+  - `Active`
+  - `On Hold`
+  - `Archived Recently`
+  - `Next`
+- Thread hygiene update prompt:
+  - `Update <repo>/docs/thread-state.md from this hygiene result.`
+  - `Keep sections: Active, On Hold, Archived Recently, Next.`
+  - `Use thread names only.`
+  - `Set Last updated to today.`
+  - `Run this after every applied hygiene pass (not only end of day).`
+  - `No commentary.`
