@@ -1,4 +1,4 @@
-# Personal website
+# me
 
 Minimal single-page website built with plain HTML, CSS, and vanilla JS.
 
