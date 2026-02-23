@@ -201,49 +201,50 @@ body.video-live .vignette {
   position: absolute;
   inset: 0;
   opacity: 0;
+  will-change: opacity, filter;
 }
 
 .breath-in {
-  animation: breath-in 8.4s ease-in-out infinite;
+  animation: breath-in 6.4s cubic-bezier(0.42, 0, 0.2, 1) infinite;
 }
 
 .breath-out {
-  animation: breath-out 8.4s ease-in-out infinite;
+  animation: breath-out 6.4s cubic-bezier(0.42, 0, 0.2, 1) infinite;
 }
 
 @keyframes breath-in {
   0%,
-  8% {
+  10% {
     opacity: 0;
-    transform: translateY(0.2em);
+    filter: blur(0.8px);
   }
-  18%,
-  44% {
+  22%,
+  47% {
     opacity: 1;
-    transform: translateY(0);
+    filter: blur(0);
   }
-  52%,
+  58%,
   100% {
     opacity: 0;
-    transform: translateY(-0.15em);
+    filter: blur(0.8px);
   }
 }
 
 @keyframes breath-out {
   0%,
-  48% {
+  50% {
     opacity: 0;
-    transform: translateY(0.2em);
+    filter: blur(0.8px);
   }
-  60%,
-  86% {
+  64%,
+  88% {
     opacity: 1;
-    transform: translateY(0);
+    filter: blur(0);
   }
-  94%,
+  96%,
   100% {
     opacity: 0;
-    transform: translateY(-0.15em);
+    filter: blur(0.8px);
   }
 }
 
