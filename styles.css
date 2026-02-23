@@ -150,6 +150,7 @@ body.video-live .vignette {
   transform: translate(-50%, -50%);
   z-index: 3;
   margin: 0;
+  text-align: center;
   color: var(--muted);
   font-size: clamp(0.8rem, 1vw, 0.93rem);
   letter-spacing: 0.09em;
@@ -168,6 +169,78 @@ body.video-live .vignette {
 .current-note a:focus-visible {
   color: #fff;
   border-color: var(--line-soft);
+}
+
+.current-note-sub {
+  position: relative;
+  display: block;
+  margin-top: 0.28rem;
+  height: 1.1em;
+  color: rgba(244, 246, 251, 0.62);
+  font-size: 0.82em;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  pointer-events: none;
+}
+
+.current-note-sub-static {
+  display: none;
+  margin-top: 0.28rem;
+  color: rgba(244, 246, 251, 0.62);
+  font-size: 0.82em;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  pointer-events: none;
+}
+
+.breath-phase {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.breath-in {
+  animation: breath-in 8.4s ease-in-out infinite;
+}
+
+.breath-out {
+  animation: breath-out 8.4s ease-in-out infinite;
+}
+
+@keyframes breath-in {
+  0%,
+  8% {
+    opacity: 0;
+    transform: translateY(0.2em);
+  }
+  18%,
+  44% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  52%,
+  100% {
+    opacity: 0;
+    transform: translateY(-0.15em);
+  }
+}
+
+@keyframes breath-out {
+  0%,
+  48% {
+    opacity: 0;
+    transform: translateY(0.2em);
+  }
+  60%,
+  86% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  94%,
+  100% {
+    opacity: 0;
+    transform: translateY(-0.15em);
+  }
 }
 
 .links {
@@ -412,5 +485,13 @@ body.video-live .vignette {
   .current-note a,
   .links a {
     transition: none;
+  }
+
+  .current-note-sub {
+    display: none;
+  }
+
+  .current-note-sub-static {
+    display: block;
   }
 }
