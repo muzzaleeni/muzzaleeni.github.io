@@ -8,6 +8,7 @@ Last updated: 2026-02-23
 ## On Hold
 
 ## Archived Recently
+- fix/mobile-overlay-spacing
 - fix/repo-hygiene
 
 ## Next

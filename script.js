@@ -4,6 +4,7 @@
   const SYNC_INTERVAL_MS = 2000;
   const INTRO_DELAY_MS = 1000;
   const TIMECODE_TICK_MS = 1000;
+  const STAGE_REVEAL_DELAY_MS = 140;
 
   const stage = document.querySelector(".film-stage");
   const video = document.getElementById("scene-video");
@@ -110,6 +111,16 @@
   let needsGestureForPlayback = false;
   let firstGestureInFlight = false;
   let lastTimecodeText = "";
+  let stageReady = false;
+
+  const markStageReady = () => {
+    if (stageReady) {
+      return;
+    }
+    stageReady = true;
+    document.body.classList.remove("pre-roll");
+    document.body.classList.add("stage-ready");
+  };
 
   const setSoundButtonState = () => {
     soundButton.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
@@ -203,6 +214,7 @@
   };
 
   const markVideoLive = () => {
+    markStageReady();
     document.body.classList.add("video-live");
   };
 
@@ -369,6 +381,9 @@
   setSoundButtonState();
   updateTimecode();
   setEditionStamp();
+  requestAnimationFrame(() => {
+    setTimeout(markStageReady, STAGE_REVEAL_DELAY_MS);
+  });
 
   setTimeout(async () => {
     await attemptVideoAutoplay();

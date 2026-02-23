@@ -4,11 +4,13 @@
   --muted: rgba(244, 246, 251, 0.7);
   --line-soft: rgba(244, 246, 251, 0.48);
   --hero-top-desktop: 44.5%;
-  --hero-top-mobile: 45.5%;
+  --hero-top-mobile: 44.8%;
+  --note-top-mobile: 63.8vh;
   --links-top-desktop: 76%;
-  --links-top-mobile: 78.5%;
+  --links-top-mobile: 76.6%;
   --timecode-bottom-desktop: 0.95rem;
   --sound-bottom-desktop: 0.82rem;
+  --stage-fade-duration: 620ms;
 }
 
 @font-face {
@@ -46,6 +48,24 @@ body {
   min-height: 100dvh;
   isolation: isolate;
   overflow: hidden;
+}
+
+.film-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.36) 72%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.45));
+  opacity: 1;
+  transition: opacity var(--stage-fade-duration) ease 120ms;
+  will-change: opacity;
+}
+
+body.stage-ready .film-stage::after {
+  opacity: 0;
 }
 
 .scene-video {
@@ -398,24 +418,24 @@ body.video-live .vignette {
   }
 
   .intro-title p {
-    margin-top: 0.64rem;
+    margin-top: 0.54rem;
     font-size: 0.95rem;
   }
 
   .intro-title .city {
-    margin-top: 0.3rem;
+    margin-top: 0.24rem;
     font-size: 0.76rem;
   }
 
   .links {
-    top: min(80vh, var(--links-top-mobile));
+    top: min(78.2vh, var(--links-top-mobile));
     width: calc(100% - 1.5rem - env(safe-area-inset-left) - env(safe-area-inset-right));
     gap: 0.48rem;
     font-size: 0.86rem;
   }
 
   .current-note {
-    top: min(65.5vh, 67%);
+    top: var(--note-top-mobile);
     font-size: 0.82rem;
     letter-spacing: 0.07em;
   }
@@ -466,7 +486,7 @@ body.video-live .vignette {
   }
 
   .current-note {
-    top: min(66.5vh, 69%);
+    top: 64.9vh;
     font-size: 0.74rem;
     letter-spacing: 0.06em;
   }
@@ -485,6 +505,7 @@ body.video-live .vignette {
 
 @media (prefers-reduced-motion: reduce) {
   .scene-video,
+  .film-stage::after,
   .vignette,
   .sound-toggle,
   .current-note a,
