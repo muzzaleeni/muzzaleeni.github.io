@@ -102,6 +102,7 @@ Static personal website with a cinematic background video, minimal overlay UI, a
   - `Update <repo>/docs/thread-state.md from this hygiene result.`
   - `Keep sections: Active, On Hold, Archived Recently, Next.`
   - `Use thread names only.`
+  - `Keep only the 5 most recent thread names in Archived Recently (newest first).`
   - `Set Last updated to today.`
   - `Run this after every applied hygiene pass (not only end of day).`
   - `No commentary.`

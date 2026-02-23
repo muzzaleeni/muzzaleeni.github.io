@@ -35,3 +35,8 @@ Do NOT log:
 **Change:** Updated local `AGENTS.md` to require `docs/thread-state.md` during bootstrap and recorded the hygiene update prompt for thread state refreshes. Added `docs/thread-state.md` with Active/On Hold/Archived Recently/Next sections.  
 **Why:** Thread workflow now needs a persistent local state file updated after every applied hygiene pass.  
 **Signal:** User request to mix thread workflow with repo bootstrap and add a standard thread-state update prompt.  
+
+### 2026-02-23 — Capped archived thread history
+**Change:** Updated local `AGENTS.md` thread hygiene instructions so `Archived Recently` keeps only the 5 most recent thread names, newest first.  
+**Why:** Keeps `docs/thread-state.md` scannable even when thread count grows large.  
+**Signal:** User asked how `Archived Recently` should behave at high thread volume and requested an explicit retention rule.  
