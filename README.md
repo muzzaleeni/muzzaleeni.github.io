@@ -5,8 +5,8 @@ Minimal single-page website built with plain HTML, CSS, and vanilla JS.
 ## Structure
 
 - `index.html`: full-viewport background video and minimal overlay
-- `styles.css`: cinematic styling, vignette/grain, fixed overlay controls
-- `script.js`: media controller (autoplay, sound preference, sync, fallback states)
+- `styles.css`: cinematic styling, vignette/grain, ambient light wash, fixed overlay controls
+- `script.js`: media controller (autoplay, sound preference, sync, fallback states, pointer-reactive stage glow)
 - `assets/`: media + icon files (video/audio/poster/favicon)
 - `resume.pdf`: downloadable CV
 
@@ -31,6 +31,7 @@ Optional fallbacks:
 - Sound does **not** autoplay by default due browser policy.
 - User enables sound with one explicit click/tap.
 - Sound preference is stored in `localStorage` as `site_sound` and unlock state as `site_sound_unlocked`.
+- Stage lighting subtly follows pointer movement on larger screens and falls back to a calm centered glow on touch devices.
 - Overlay links remain available at all times.
 
 ## Suggested encoding targets

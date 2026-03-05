@@ -14,6 +14,7 @@
   const timecodeEl = document.getElementById("timecode");
   const copyrightYearEl = document.getElementById("copyright-year");
   const editionStampEl = document.getElementById("edition-stamp");
+  const rootStyle = document.documentElement.style;
 
   if (!stage || !video || !audio || !soundButton || !statusEl || !timecodeEl) {
     return;
@@ -112,6 +113,15 @@
   let firstGestureInFlight = false;
   let lastTimecodeText = "";
   let stageReady = false;
+  let pointerGlowFrame = 0;
+  let glowX = 50;
+  let glowY = 46;
+  let targetGlowX = 50;
+  let targetGlowY = 46;
+  let glowStrength = 0.9;
+  let targetGlowStrength = 0.9;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   const markStageReady = () => {
     if (stageReady) {
@@ -125,6 +135,51 @@
   const setSoundButtonState = () => {
     soundButton.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
     soundButton.textContent = soundEnabled ? "sound off" : "sound on";
+  };
+
+  const commitGlow = () => {
+    pointerGlowFrame = 0;
+    glowX += (targetGlowX - glowX) * 0.12;
+    glowY += (targetGlowY - glowY) * 0.12;
+    glowStrength += (targetGlowStrength - glowStrength) * 0.12;
+
+    rootStyle.setProperty("--glow-x", `${glowX.toFixed(2)}%`);
+    rootStyle.setProperty("--glow-y", `${glowY.toFixed(2)}%`);
+    rootStyle.setProperty("--glow-strength", glowStrength.toFixed(3));
+
+    const needsMoreFrames =
+      Math.abs(targetGlowX - glowX) > 0.08 ||
+      Math.abs(targetGlowY - glowY) > 0.08 ||
+      Math.abs(targetGlowStrength - glowStrength) > 0.02;
+
+    if (needsMoreFrames) {
+      pointerGlowFrame = requestAnimationFrame(commitGlow);
+    }
+  };
+
+  const scheduleGlowCommit = () => {
+    if (!pointerGlowFrame) {
+      pointerGlowFrame = requestAnimationFrame(commitGlow);
+    }
+  };
+
+  const updateGlowTarget = (clientX, clientY, strength = 1) => {
+    const width = window.innerWidth || 1;
+    const height = window.innerHeight || 1;
+    const xRatio = clamp(clientX / width, 0, 1);
+    const yRatio = clamp(clientY / height, 0, 1);
+
+    targetGlowX = 38 + xRatio * 24;
+    targetGlowY = 34 + yRatio * 24;
+    targetGlowStrength = clamp(strength, 0.76, 1.18);
+    scheduleGlowCommit();
+  };
+
+  const resetGlowTarget = () => {
+    targetGlowX = 50;
+    targetGlowY = 46;
+    targetGlowStrength = 0.9;
+    scheduleGlowCommit();
   };
 
   const pad2 = (value) => String(Math.max(0, value)).padStart(2, "0");
@@ -307,6 +362,15 @@
   soundButton.addEventListener("click", handleSoundToggle);
 
   stage.addEventListener("pointerup", handleFirstPaintGesture, { passive: true });
+  stage.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "mouse" || event.pointerType === "pen") {
+      updateGlowTarget(event.clientX, event.clientY, 1.08);
+    }
+  }, { passive: true });
+  stage.addEventListener("pointerleave", resetGlowTarget, { passive: true });
+  stage.addEventListener("pointerdown", (event) => {
+    updateGlowTarget(event.clientX, event.clientY, 1.14);
+  }, { passive: true });
   document.addEventListener("keydown", (event) => {
     const target = event.target;
     const isTypingTarget =
@@ -335,6 +399,10 @@
       handleFirstPaintGesture();
     }
   });
+
+  window.addEventListener("resize", () => {
+    resetGlowTarget();
+  }, { passive: true });
 
   video.addEventListener("durationchange", updateTimecode);
   video.addEventListener("loadedmetadata", updateTimecode);
@@ -381,6 +449,7 @@
   setSoundButtonState();
   updateTimecode();
   setEditionStamp();
+  resetGlowTarget();
   requestAnimationFrame(() => {
     setTimeout(markStageReady, STAGE_REVEAL_DELAY_MS);
   });

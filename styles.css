@@ -11,6 +11,9 @@
   --timecode-bottom-desktop: 0.95rem;
   --sound-bottom-desktop: 0.82rem;
   --stage-fade-duration: 620ms;
+  --glow-x: 50%;
+  --glow-y: 46%;
+  --glow-strength: 0.9;
 }
 
 @font-face {
@@ -84,6 +87,40 @@ body.stage-ready .film-stage::after {
 
 body.video-live .scene-video {
   opacity: 1;
+}
+
+.ambient-light {
+  position: absolute;
+  inset: -12%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      42rem 30rem at var(--glow-x) var(--glow-y),
+      rgba(210, 231, 255, calc(0.17 * var(--glow-strength))) 0%,
+      rgba(125, 165, 214, calc(0.12 * var(--glow-strength))) 24%,
+      rgba(54, 84, 116, calc(0.08 * var(--glow-strength))) 42%,
+      rgba(0, 0, 0, 0) 72%
+    ),
+    radial-gradient(
+      24rem 20rem at calc(var(--glow-x) + 8%) calc(var(--glow-y) - 10%),
+      rgba(255, 255, 255, calc(0.08 * var(--glow-strength))) 0%,
+      rgba(255, 255, 255, 0) 62%
+    );
+  mix-blend-mode: screen;
+  filter: blur(18px);
+  transition: opacity 1200ms ease, transform 1600ms ease;
+  will-change: opacity, transform;
+  transform: scale(1.03);
+}
+
+body.stage-ready .ambient-light {
+  opacity: 0.62;
+}
+
+body.video-live .ambient-light {
+  transform: scale(1);
 }
 
 .vignette {
@@ -407,6 +444,12 @@ body.video-live .vignette {
     touch-action: manipulation;
   }
 
+  .ambient-light {
+    inset: -22%;
+    opacity: 0.54;
+    filter: blur(20px);
+  }
+
   .intro-title {
     top: var(--hero-top-mobile);
     width: calc(100% - 1.2rem);
@@ -504,6 +547,7 @@ body.video-live .vignette {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ambient-light,
   .scene-video,
   .film-stage::after,
   .vignette,
